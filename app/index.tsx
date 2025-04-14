@@ -34,7 +34,13 @@ export default function App(){
 
         <TouchableOpacity 
           style={styles.botaologin2}>
-          <Text style={styles.txtbut2}>Entre com o Google!</Text>
+            <View style={styles.botgooglelogin}>
+              <Image
+              source={require("../assets/images/googleiconlogin.png")}
+              style={styles.icongoogle}
+              />
+              <Text style={styles.txtbut2}>Entre com o Google!</Text>
+            </View>
         </TouchableOpacity>
 
         
@@ -80,22 +86,27 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   botaologin:{
-    backgroundColor: "white",
+    backgroundColor: "#3db342",
     width: "25%",
     height: "10%",
     marginTop: 30,
     marginBottom: 20,
-    borderColor: "#27692a",
+    borderColor: "#3db342",
     borderWidth: 2,
-    borderRadius: 3,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   txtbut:{
-    fontSize: 18
+    fontSize: 18,
+    color: "white",
+    fontWeight: "700" 
   },
   txtcad:{
 
+  },
+  botgooglelogin:{
+    flexDirection: "row",
   },
   botaologin2:{
     width: '80%',
@@ -105,10 +116,20 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     marginTop: 30,
+    padding: 0,
+    position: "relative",
+    borderRadius: 5
   },
   txtbut2:{
-
+    textAlign: "center",
+    width:"100%"
   },  
+  icongoogle:{
+    height: "90%",
+    width: "8%",
+    position: "absolute",
+    left: 16
+  }
   
 
 })
