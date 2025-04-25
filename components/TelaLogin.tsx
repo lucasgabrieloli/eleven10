@@ -1,19 +1,18 @@
+import { GlobalStyles } from '@/styles/GlobalStyles';
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native'
 
 export default function TelaLogin(){
   return(
-    <NavigationContainer>{
-    <View style={styles.root}>
+    <View style={GlobalStyles.root}>
       <ImageBackground
-          style={styles.container}
+          style={GlobalStyles.container}
           source = {require('../assets/images/backgroundlogin.png')}
       >
       <View style={styles.boxlogin}>
-        <Text style={ styles.textlogin}>Login</Text>  
+        <Text style={GlobalStyles.textlogin}>Login</Text>  
         
         <TextInput 
-          style={styles.input}
+          style={GlobalStyles.input}
           placeholder="Digite seu E-mail"
           placeholderTextColor="#666"
           keyboardType='email-address'
@@ -21,7 +20,7 @@ export default function TelaLogin(){
         />
 
         <TextInput
-          style={styles.input}
+          style={GlobalStyles.input}
           placeholder="Digite sua senha"
           placeholderTextColor='#666'
           secureTextEntry={true}
@@ -32,7 +31,7 @@ export default function TelaLogin(){
           <Text style={styles.txtbut}>Entrar</Text>
         </TouchableOpacity>
 
-        <Text style={styles.txtcad}>Não tem uma conta? Cadastre-se!</Text>
+        <Text style={styles.txtcad}>Não tem uma conta?</Text> <TouchableOpacity style={styles.botcads}><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.botaologin2}>
@@ -49,21 +48,11 @@ export default function TelaLogin(){
       </View>  
       </ImageBackground>
     </View>
-  }</NavigationContainer>
   )
 }
 
 const styles = StyleSheet.create({
 
-  root:{
-    flex:1
-  },
-  container:{
-    flex: 1,
-    backgroundColor: "#005103",
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
@@ -72,21 +61,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 0.6, 
     borderRadius: 10,
-  },
-  textlogin:{
-    marginTop: '6%',
-    fontSize: 30,
-  },
-  input:{
-    width:'70%',
-    marginTop:'15%',
-    marginLeft:0,
-    marginRight:0,
-    borderBottomWidth:1,
-    fontSize: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 2,
   },
   botaologin:{
     backgroundColor: "#3db342",
@@ -106,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: "700" 
   },
   txtcad:{
-
+    fontSize: 15
   },
   botgooglelogin:{
     flexDirection: "row",
@@ -118,7 +92,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     alignItems:'center',
     justifyContent: 'center',
-    marginTop: 30,
+    marginTop: 20,
     padding: 0,
     position: "relative",
     borderRadius: 5
@@ -132,6 +106,18 @@ const styles = StyleSheet.create({
     width: "8%",
     position: "absolute",
     left: 16
+  },
+  botcads:{
+    width: 90,
+    height: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+  },
+  txtbotcads:{
+    color: "green",
+    fontSize: 15,
+    fontWeight: 800,
   }
   
 
