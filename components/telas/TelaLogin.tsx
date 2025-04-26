@@ -1,26 +1,18 @@
-import { GlobalStyles } from '@/styles/GlobalStyles';
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import {InputEmail} from '../other/InputsCadastro';
 
 export default function TelaLogin(){
   return(
-    <View style={GlobalStyles.root}>
+    <View style={styles.root}>
       <ImageBackground
-          style={GlobalStyles.container}
+          style={styles.container}
           source = {require('../assets/images/backgroundlogin.png')}
       >
       <View style={styles.boxlogin}>
-        <Text style={GlobalStyles.textlogin}>Login</Text>  
-        
-        <TextInput 
-          style={GlobalStyles.input}
-          placeholder="Digite seu E-mail"
-          placeholderTextColor="#666"
-          keyboardType='email-address'
-          autoCapitalize='none'
-        />
-
+        <Text style={styles.textlogin}>Login</Text>  
+        <InputEmail/>
         <TextInput
-          style={GlobalStyles.input}
+          style={styles.input}
           placeholder="Digite sua senha"
           placeholderTextColor='#666'
           secureTextEntry={true}
@@ -52,7 +44,20 @@ export default function TelaLogin(){
 }
 
 const styles = StyleSheet.create({
-
+  root:{
+    flex:1,
+  },
+  container:{
+    flex: 1,
+    backgroundColor: "#3db342",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },  
+  textlogin:{
+    marginTop: 20,
+    fontSize: 30,
+    fontWeight: 900,
+  },
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
@@ -80,7 +85,8 @@ const styles = StyleSheet.create({
     fontWeight: "700" 
   },
   txtcad:{
-    fontSize: 15
+    fontSize: 15,
+    marginTop: 15
   },
   botgooglelogin:{
     flexDirection: "row",
@@ -92,7 +98,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     alignItems:'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop:30,
     padding: 0,
     position: "relative",
     borderRadius: 5
@@ -118,7 +124,17 @@ const styles = StyleSheet.create({
     color: "green",
     fontSize: 15,
     fontWeight: 800,
-  }
-  
+  },
+  input:{
+    width:'70%',
+    marginTop:'10%',
+    marginLeft:0,
+    marginRight:0,
+    borderBottomWidth:1,
+    fontSize: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 2,
+  },
 
 })
