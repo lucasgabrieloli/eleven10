@@ -103,6 +103,40 @@ export function InputDataNascimento(){
     )
 }
 
+export function InputSenha(){
+    const [senha, setSenha] = useState('')
+
+    return(
+        <View>
+            <Text style={styles.texcad}>Senha:</Text>
+            <TextInput
+            style={styles.input}
+            placeholder="Digite sua Senha:"
+            placeholderTextColor='#666'
+            secureTextEntry={true}
+            value={senha}
+            onChangeText={setSenha}  
+            />
+        </View>
+    )
+}   
+
+export function InputUsername(){
+    const [username, setUsername] = useState('')
+
+    return(
+        <View>
+            <Text style={styles.texcad}>Nome de Usuário:</Text>
+            <TextInput
+            style={styles.input}
+            placeholder="Digite seu Nome de Usuário:"
+            placeholderTextColor='#666'
+            value={username}
+            onChangeText={setUsername}  
+            />
+        </View>
+    )
+}
 
 
 
@@ -113,7 +147,7 @@ const styles = StyleSheet.create({
         width: "100%",
         borderRadius: 3,
         backgroundColor: "white",
-    },
+    },  
     texcad:{
         marginTop: 20,
         fontWeight: 700,

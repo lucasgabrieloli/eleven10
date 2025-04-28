@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native'
-import InputNome, {InputEmail, InputTelefone, InputCPF, InputDataNascimento} from '../other/InputsCadastro'
+import {InputSenha, InputUsername} from '../other/InputsCadastro'
 import {GlobalStyles} from '../../styles/GlobalStyles'
 
 
@@ -10,18 +10,14 @@ export default function TelaCadastro(){
                 <View style={styles.header}>
                     <Text style={styles.textlogin}>Cadastre-se</Text>
                     <View style={styles.dadpdadl}>
-                        <Text style={{marginRight:"10%", borderBottomWidth: 1.5, marginBottom: -0.8, borderColor: "black", color:"black", fontWeight: 700}}>1.Dados Pessoais</Text>
-                        <Text>2. Dados de Login</Text>
+                        <Text style={{color: "#3db342", fontWeight: 700, marginRight: "10%"}}>1.Dados Pessoais</Text>
+                        <Text style={{borderBottomWidth: 1.5, marginBottom: -0.8, borderColor: "black", color:"black", fontWeight: 700}}>2. Dados de Login</Text>
                     </View>
                 </View> 
                 <View style={styles.boxcad}>
                     <Text style={styles.textaviso}>Apenas maiores de 18 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu CPF, Nome Completo ou Telefone no seu Perfil Atleta.</Text>
-                    <InputNome/>
-                    <InputEmail/>
-                    <InputTelefone/>
-                    <InputCPF/>
-                    <InputDataNascimento/>
-
+                    <InputUsername/>
+                    <InputSenha/>
                     <View style={styles.divbotoes}>
                     <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>VOLTAR</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>AVANÇAR</Text></TouchableOpacity>
@@ -54,7 +50,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '70%',
+        height: '40%',
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,

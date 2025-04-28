@@ -1,26 +1,25 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
-import {InputEmail} from '../other/InputsCadastro';
+import {InputEmail, InputSenha} from '../other/InputsCadastro'
+import {GlobalStyles} from '../../styles/GlobalStyles';
 
 export default function TelaLogin(){
   return(
     <View style={styles.root}>
       <ImageBackground
           style={styles.container}
-          source = {require('../assets/images/backgroundlogin.png')}
+          source={require('../../assets/images/backgroundlogin.png')}
       >
       <View style={styles.boxlogin}>
         <Text style={styles.textlogin}>Login</Text>  
-        <InputEmail/>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite sua senha"
-          placeholderTextColor='#666'
-          secureTextEntry={true}
-        />
+
+        <View style={styles.divinputs}>
+          <InputEmail/>
+          <InputSenha/>
+        </View>
 
         <TouchableOpacity 
           style={styles.botaologin}>
-          <Text style={styles.txtbut}>Entrar</Text>
+          <Text style={GlobalStyles.txtbut}>Entrar</Text>
         </TouchableOpacity>
 
         <Text style={styles.txtcad}>Não tem uma conta?</Text> <TouchableOpacity style={styles.botcads}><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
@@ -29,7 +28,7 @@ export default function TelaLogin(){
           style={styles.botaologin2}>
             <View style={styles.botgooglelogin}>
               <Image
-              source={require("../assets/images/googleiconlogin.png")}
+              source={require("../../assets/images/googleiconlogin.png")}
               style={styles.icongoogle}
               />
               <Text style={styles.txtbut2}>Entre com o Google!</Text>
@@ -61,11 +60,15 @@ const styles = StyleSheet.create({
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
-    height: '50%',
+    height: '55%',
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 0.6, 
     borderRadius: 10,
+  },
+  txtcad:{
+    fontSize: 15,
+    marginTop: 15
   },
   botaologin:{
     backgroundColor: "#3db342",
@@ -78,15 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  txtbut:{
-    fontSize: 18,
-    color: "white",
-    fontWeight: "700" 
-  },
-  txtcad:{
-    fontSize: 15,
-    marginTop: 15
   },
   botgooglelogin:{
     flexDirection: "row",
@@ -136,5 +130,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 2,
   },
+  divinputs:{
+    width: '90%',
+  }
 
 })
