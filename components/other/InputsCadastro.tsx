@@ -83,9 +83,6 @@ export function InputDataNascimento(){
             setMensagemVerificacao("O formato deve ser: DD/MM/AAAA!")
             return
         }
-
-                //PRECISO TERMINAR DE FAZER A VALIDAÇÃO DE IDADE PARA SER MAIOR QUE 14 ANOS NO APLICATIVO!!
-
     }
 
     return(

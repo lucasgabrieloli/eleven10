@@ -1,8 +1,16 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
 import {InputEmail, InputSenha} from '../other/InputsCadastro'
 import {GlobalStyles} from '../../styles/GlobalStyles';
+import { useNavigation } from '@react-navigation/native';
+import TelaCadastro from './TelaCadastro';
+import { RootStackParamList } from '../../types/RootStackParamList';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
 
 export default function TelaLogin(){
+  
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return(
     <View style={styles.root}>
       <ImageBackground
@@ -22,7 +30,10 @@ export default function TelaLogin(){
           <Text style={GlobalStyles.txtbut}>Entrar</Text>
         </TouchableOpacity>
 
-        <Text style={styles.txtcad}>Não tem uma conta?</Text> <TouchableOpacity style={styles.botcads}><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
+        <Text style={styles.txtcad}>Não tem uma conta?</Text> 
+        <TouchableOpacity style={styles.botcads}
+        onPress={() => navigation.navigate('Cadastro')}
+        ><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.botaologin2}>

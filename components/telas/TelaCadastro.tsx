@@ -1,9 +1,13 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native'
 import InputNome, {InputEmail, InputTelefone, InputCPF, InputDataNascimento} from '../other/InputsCadastro'
 import {GlobalStyles} from '../../styles/GlobalStyles'
+import { useNavigation } from '@react-navigation/native'
+import { RootStackParamList } from '@/types/RootStackParamList';
 
 
 export default function TelaCadastro(){
+    const navigation = useNavigation();
+
     return(
         <View style={styles.container}>
             
@@ -24,7 +28,7 @@ export default function TelaCadastro(){
 
                     <View style={styles.divbotoes}>
                     <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>VOLTAR</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>AVANÇAR</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>CONTINUAR</Text></TouchableOpacity>
                     </View>
                 
                 </View>
@@ -79,21 +83,21 @@ const styles = StyleSheet.create({
     },
     botaologin:{
         backgroundColor: "#3db342",
-        width: "45%",
-        height: "10%",
-        marginTop: 30,
-        marginBottom: 20,
+        width: "40%",
+        height: "9%",
         borderColor: "#3db342",
         borderWidth: 2,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 23
     },
     divbotoes:{
         width: "100%",
         height: "100%",
         flexDirection: "row",
-        justifyContent: "space-between",
+        gap: 30,
+        justifyContent: 'center',
     },
 
 });

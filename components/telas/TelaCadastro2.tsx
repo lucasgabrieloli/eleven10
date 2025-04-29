@@ -2,8 +2,7 @@ import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpac
 import {InputSenha, InputUsername} from '../other/InputsCadastro'
 import {GlobalStyles} from '../../styles/GlobalStyles'
 
-
-export default function TelaCadastro(){
+export default function TelaCadastro2(){
     return(
         <View style={styles.container}>
             
@@ -18,11 +17,14 @@ export default function TelaCadastro(){
                     <Text style={styles.textaviso}>Apenas maiores de 18 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu CPF, Nome Completo ou Telefone no seu Perfil Atleta.</Text>
                     <InputUsername/>
                     <InputSenha/>
+                    <View style={styles.labels}>
+                        
+
+                    </View>
                     <View style={styles.divbotoes}>
                     <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>VOLTAR</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>AVANÇAR</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>CONTINUAR</Text></TouchableOpacity>
                     </View>
-                
                 </View>
 
                
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '40%',
+        height: '70%',
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,
@@ -75,21 +77,22 @@ const styles = StyleSheet.create({
     },
     botaologin:{
         backgroundColor: "#3db342",
-        width: "45%",
-        height: "10%",
-        marginTop: 30,
-        marginBottom: 20,
+        width: "40%",
+        height: "9%",
         borderColor: "#3db342",
         borderWidth: 2,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 23
     },
     divbotoes:{
         width: "100%",
         height: "100%",
         flexDirection: "row",
-        justifyContent: "space-between",
+        gap: 30,
+        justifyContent: 'center',
     },
+    labels:{},
 
 });
