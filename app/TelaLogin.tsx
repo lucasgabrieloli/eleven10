@@ -1,21 +1,18 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
-import {InputEmail, InputSenha} from '../other/InputsCadastro'
-import {GlobalStyles} from '../../styles/GlobalStyles';
-import { useNavigation } from '@react-navigation/native';
+import {InputEmail, InputSenha} from '../components/InputsCadastro'
+import {GlobalStyles} from '../styles/GlobalStyles';
 import TelaCadastro from './TelaCadastro';
-import { RootStackParamList } from '../../types/RootStackParamList';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-
+import { useRouter } from 'expo-router';
 
 export default function TelaLogin(){
-  
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const router = useRouter();
 
   return(
     <View style={styles.root}>
       <ImageBackground
           style={styles.container}
-          source={require('../../assets/images/backgroundlogin.png')}
+          source={require('../assets/images/backgroundlogin.png')}
       >
       <View style={styles.boxlogin}>
         <Text style={styles.textlogin}>Login</Text>  
@@ -32,14 +29,14 @@ export default function TelaLogin(){
 
         <Text style={styles.txtcad}>Não tem uma conta?</Text> 
         <TouchableOpacity style={styles.botcads}
-        onPress={() => navigation.navigate('Cadastro')}
+        onPress={() => router.push('/TelaCadastro')}
         ><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.botaologin2}>
             <View style={styles.botgooglelogin}>
               <Image
-              source={require("../../assets/images/googleiconlogin.png")}
+              source={require("../assets/images/googleiconlogin.png")}
               style={styles.icongoogle}
               />
               <Text style={styles.txtbut2}>Entre com o Google!</Text>
