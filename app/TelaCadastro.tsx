@@ -26,11 +26,11 @@ export default function TelaCadastro(){
                     <InputDataNascimento/>
 
                     <View style={styles.divbotoes}>
-                    <TouchableOpacity style={styles.botaologin} onPress={() => router.push('/TelaLogin')}>
-                        <Text style={GlobalStyles.txtbut}>VOLTAR</Text>
+                    <TouchableOpacity style={GlobalStyles.botaologin} onPress={() => router.push('/TelaLogin')}>
+                        <Text style={GlobalStyles.txtbut}>Voltar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaologin}>
-                        <Text style={GlobalStyles.txtbut}>CONTINUAR</Text>
+                    <TouchableOpacity style={GlobalStyles.botaologin}>
+                        <Text style={GlobalStyles.txtbut}>Continuar</Text>
                     </TouchableOpacity>
                     </View>
                 
@@ -83,17 +83,6 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         color: "gray",
         fontSize: 11,
-    },
-    botaologin:{
-        backgroundColor: "#3db342",
-        width: "40%",
-        height: "9%",
-        borderColor: "#3db342",
-        borderWidth: 2,
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 23
     },
     divbotoes:{
         width: "100%",

@@ -18,12 +18,11 @@ export default function TelaCadastro2(){
                     <InputUsername/>
                     <InputSenha/>
                     <View style={styles.labels}>
-                        
 
                     </View>
                     <View style={styles.divbotoes}>
-                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>VOLTAR</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.botaologin}><Text style={GlobalStyles.txtbut}>CONTINUAR</Text></TouchableOpacity>
+                    <TouchableOpacity style={GlobalStyles.botaologin}><Text style={GlobalStyles.txtbut}>Voltar</Text></TouchableOpacity>
+                    <TouchableOpacity style={GlobalStyles.botaologin}><Text style={GlobalStyles.txtbut}>Continuar</Text></TouchableOpacity>
                     </View>
                 </View>
 
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '70%',
+        height: '40%',
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,
@@ -74,17 +73,6 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         color: "gray",
         fontSize: 11,
-    },
-    botaologin:{
-        backgroundColor: "#3db342",
-        width: "40%",
-        height: "9%",
-        borderColor: "#3db342",
-        borderWidth: 2,
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 23
     },
     divbotoes:{
         width: "100%",

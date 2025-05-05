@@ -23,7 +23,7 @@ export default function TelaLogin(){
         </View>
 
         <TouchableOpacity 
-          style={styles.botaologin}>
+          style={GlobalStyles.botaologin}>
           <Text style={GlobalStyles.txtbut}>Entrar</Text>
         </TouchableOpacity>
 
@@ -77,18 +77,6 @@ const styles = StyleSheet.create({
   txtcad:{
     fontSize: 15,
     marginTop: 15
-  },
-  botaologin:{
-    backgroundColor: "#3db342",
-    width: "25%",
-    height: "10%",
-    marginTop: 30,
-    marginBottom: 20,
-    borderColor: "#3db342",
-    borderWidth: 2,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   botgooglelogin:{
     flexDirection: "row",
