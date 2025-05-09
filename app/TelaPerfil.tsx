@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet} from 'react-native'
 
-export default function perfil(){
+export default function TelaPerfil(){
 return(
 
     <View>
