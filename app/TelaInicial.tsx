@@ -17,9 +17,39 @@ export default function TelaInicial (){
                     style={styles.logoheader}
                 />
                 <View style={styles.divbotao}>
-                    <TouchableOpacity
-                    style={styles.botpag}
-                    />
+                    <TouchableOpacity 
+                    style={{        
+                        width: "25%",
+                        height: "60%",
+                        borderBottomWidth: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderBottomColor: "gray",
+                        }}>
+                        <Text style={styles.textbotao}>Hypados</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    style={{        
+                        width: "25%",
+                        height: "60%",
+                        borderBottomWidth: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderBottomColor: "#3db342",
+                        }}>
+                        <Text style={styles.textbotaosel}>Para você</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    style={{        
+                        width: "25%",
+                        height: "60%",
+                        borderBottomWidth: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderBottomColor: "gray",
+                        }}>
+                        <Text style={styles.textbotao}>Favoritos</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -37,24 +67,27 @@ const styles = StyleSheet.create({
     },  
     header:{
         width: "100%",
-        height: 150,
-        opacity: 0.3,
-        backgroundColor: "green",
+        height: 90,
         position: "absolute",
-    },
-    botpag:{
-        backgroundColor: "black",
-        width: "20%",
-        height: "20%",
     },
     divbotao:{
         width: "100%",
-        backgroundColor: "red",
-        marginTop: 20,
+        marginTop: 10,
+        justifyContent: "center",
+        flexDirection: "row",
+        height: "45%",
     },
     logoheader:{
         width: "40%",
-        marginLeft: 20,
-        height: "20%",
+        marginLeft: 10,
+        height: "40%",
+        marginTop: 20,
+    },
+    textbotao:{
+        color: "gray"
+    },
+    textbotaosel:{
+        color: "#3db342",
+        fontWeight: 600,
     }
 })
