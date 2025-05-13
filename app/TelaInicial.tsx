@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import { Text, View, StyleSheet, ImageBackground, TouchableOpacity, Image } from "react-native";
+import Footer from "@/components/Footer";
 
 export default function TelaInicial (){
 
@@ -26,7 +27,7 @@ export default function TelaInicial (){
                         alignItems: "center",
                         borderBottomColor: "gray",
                         }}>
-                        <Text style={styles.textbotao}>Hypados</Text>
+                        <Text style={styles.textbotao} onPress={()=> router.push('/TelaHypados')}>Hypados</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                     style={{        
@@ -37,7 +38,7 @@ export default function TelaInicial (){
                         alignItems: "center",
                         borderBottomColor: "#3db342",
                         }}>
-                        <Text style={styles.textbotaosel}>Para você</Text>
+                        <Text style={styles.textbotaosel} onPress={()=> router.push('/TelaInicial')}>Para você</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                     style={{        
@@ -48,10 +49,13 @@ export default function TelaInicial (){
                         alignItems: "center",
                         borderBottomColor: "gray",
                         }}>
-                        <Text style={styles.textbotao}>Favoritos</Text>
-                    </TouchableOpacity>
-                </View>
+                        <Text style={styles.textbotao} onPress={()=> router.push('/TelaFavoritos')}>Favoritos</Text>
+                    </TouchableOpacity> 
+                </View> 
             </View>
+            
+            <Footer/>
+
         </View>
     )
 }
