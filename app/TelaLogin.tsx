@@ -9,6 +9,7 @@ export default function TelaLogin(){
   const router = useRouter();
 
   return(
+    
     <View style={styles.root}>
       <ImageBackground
           style={styles.container}
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
-    height: '55%',
+    height: '60%',
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 0.6, 
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     marginTop:30,
     padding: 0,
     position: "relative",
-    borderRadius: 5
+    borderRadius: 5,
   },
   txtbut2:{
     textAlign: "center",

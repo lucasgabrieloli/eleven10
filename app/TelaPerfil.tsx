@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet,  TextInput, ScrollView, Image, TouchableOpacity, Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Footer from '@/components/Footer';
 
 type Midia = {
   uri: string;
@@ -43,7 +44,8 @@ export default function TelaPerfil() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Perfil do Atleta</Text>
       </View>
@@ -78,8 +80,11 @@ export default function TelaPerfil() {
             )
           )}
         </View>
-      </View>
-    </ScrollView>
+        
+      </View> 
+      <Footer/>
+    </View>
+  
   );
 }
 

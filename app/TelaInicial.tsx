@@ -26,8 +26,10 @@ export default function TelaInicial (){
                         justifyContent: "center",
                         alignItems: "center",
                         borderBottomColor: "gray",
-                        }}>
-                        <Text style={styles.textbotao} onPress={()=> router.push('/TelaHypados')}>Hypados</Text>
+                        }}
+                        onPress={()=> router.push('/TelaHypados')}
+                        >
+                        <Text style={styles.textbotao}>Hypados</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                     style={{        
@@ -37,8 +39,10 @@ export default function TelaInicial (){
                         justifyContent: "center",
                         alignItems: "center",
                         borderBottomColor: "#3db342",
-                        }}>
-                        <Text style={styles.textbotaosel} onPress={()=> router.push('/TelaInicial')}>Para você</Text>
+                        }}
+                        onPress={()=> router.push('/TelaInicial')}
+                        >
+                        <Text style={styles.textbotaosel}>Para você</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                     style={{        
@@ -48,8 +52,10 @@ export default function TelaInicial (){
                         justifyContent: "center",
                         alignItems: "center",
                         borderBottomColor: "gray",
-                        }}>
-                        <Text style={styles.textbotao} onPress={()=> router.push('/TelaFavoritos')}>Favoritos</Text>
+                        }}
+                        onPress={()=> router.push('/TelaFavoritos')}
+                        >
+                        <Text style={styles.textbotao}>Favoritos</Text>
                     </TouchableOpacity> 
                 </View> 
             </View>
@@ -92,6 +98,6 @@ const styles = StyleSheet.create({
     },
     textbotaosel:{
         color: "#3db342",
-        fontWeight: 600,
+        fontWeight: 700,
     }
 })
