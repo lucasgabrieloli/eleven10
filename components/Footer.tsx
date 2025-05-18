@@ -21,9 +21,13 @@ export default function Footer() {
                 style={styles.otherimg}
                 />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.otherbotao}>
+            <TouchableOpacity style={styles.otherbotao}
+            onPress ={()=> router.push('/TelaEventos')}>
                 <Image
-                source={require('../assets/images/eventosicon.png')}
+                source={
+                    pathname === "/TelaEventos" ? require('../assets/images/eventosicon_ativado.png')
+                    : require('../assets/images/eventosicon.png')
+                }
                 style={styles.otherimg}
                 />
             </TouchableOpacity>
@@ -33,9 +37,13 @@ export default function Footer() {
                 style={styles.maisimg}
                 />
             </TouchableOpacity>      
-            <TouchableOpacity style={styles.otherbotao}>
+            <TouchableOpacity style={styles.otherbotao}
+            onPress={()=> router.push('/TelaPesquisa')}>
                 <Image
-                    source={require('../assets/images/searchicon.png')}
+                    source={
+                        pathname === "/TelaPesquisa" ? require('../assets/images/searchicon_ativado.png')
+                        : require('../assets/images/searchicon.png')
+                    }
                     style={styles.otherimg}
                 />
             </TouchableOpacity>
