@@ -15,7 +15,7 @@ export default function Footer() {
             onPress={()=> router.push('/TelaInicial')}>
                 <Image
                 source={
-                    pathname === "/TelaInicial" ? require('../assets/images/homeicon_ativado.png')
+                    pathname === "/TelaInicial" || pathname === "/TelaHypados" || pathname === "/TelaFavoritos"? require('../assets/images/homeicon_ativado.png')
                     : require('../assets/images/homeicon.png')
                 }
                 style={styles.otherimg}
@@ -44,7 +44,10 @@ export default function Footer() {
             onPress={()=> router.push('/TelaPerfil')}
             >
                 <Image
-                source={require('../assets/images/usericon.png')}
+                source={
+                    pathname === "/TelaPerfil" ? require('../assets/images/usericon_ativado.png')
+                    : require('../assets/images/usericon.png')
+                }
                 style={styles.otherimg}
                 />
             </TouchableOpacity>
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     botoesfooter:{
-        width: "95%",
+        width: "92%",
         flexDirection: "row",
         alignItems: "center",
         height: "100%",
@@ -89,8 +92,8 @@ const styles = StyleSheet.create({
         width: "15%"
     },
     otherbotao:{
-        height: "55%",
-        width: "9%"
+        height: "52%",
+        width: "8%"
     },
     otherimg:{
         width: "100%",
