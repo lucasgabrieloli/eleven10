@@ -6,8 +6,6 @@ export default function Footer() {
     const router = useRouter()
     const pathname = usePathname()
 
-    const isActive = (path: string) => pathname === path
-
     return(
     <View style={styles.footer}>
         <View style={styles.botoesfooter}>
