@@ -15,7 +15,9 @@ export default function Footer() {
             onPress={()=> router.push('/TelaInicial')}>
                 <Image
                 source={
-                    pathname === "/TelaInicial" || pathname === "/TelaHypados" || pathname === "/TelaFavoritos"? require('../assets/images/homeicon_ativado.png')
+                    pathname === "/TelaInicial" || 
+                    pathname === "/TelaHypados" || 
+                    pathname === "/TelaFavoritos"? require('../assets/images/homeicon_ativado.png')
                     : require('../assets/images/homeicon.png')
                 }
                 style={styles.otherimg}
