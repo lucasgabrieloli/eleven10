@@ -10,10 +10,17 @@ export default function Header (){
 
     return(
             <View style={styles.header}>
-                <Image 
-                    source={require ('../assets/images/logoheader.png')}
-                    style={styles.logoheader}
-                />
+                <View style={styles.linhaheader}>
+                    <Image 
+                        source={require ('../assets/images/logoheader.png')}
+                        style={styles.logoheader}
+                    />
+
+                    <Image
+                        source={require('../assets/images/settingsicon.png')}
+                        style={styles.iconright}
+                    />
+                </View>
                 <View style={styles.divbotao}>
                     <TouchableOpacity style={[styles.botaoheader, isActive('/TelaHypados') && styles.botaoativado]}
                     onPress={()=> router.push('/TelaHypados')}>
@@ -44,16 +51,13 @@ const styles = StyleSheet.create({
     },
     divbotao:{
         width: "100%",
-        marginTop: 10,
         justifyContent: "center",
         flexDirection: "row",
         height: "45%",
     },
     logoheader:{
         width: "40%",
-        marginLeft: 10,
-        height: "40%",
-        marginTop: 20,
+        height: "40%"
     },
     textbotao:{
         color: "gray"
@@ -73,5 +77,21 @@ const styles = StyleSheet.create({
     botaoativado:{
         borderColor: "green",
         fontWeight: 800,
-    }
+    },
+    linhaheader:{
+        width: "100%",
+        height: "90%",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row"
+    },
+    iconright: {
+        position: 'absolute',
+        right: 16,
+        top: '50%',
+        transform: [{ translateY: -12 }],
+        width: 24,
+        height: 24,
+        resizeMode: 'contain',
+}
 })

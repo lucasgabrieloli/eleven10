@@ -11,8 +11,8 @@ export default function TelaPesquisa(){
             <View style={styles.header}>
                 <TextInput
                 style={styles.searchinput}
-                placeholder="Procurar atleta..."
-                placeholderTextColor={"gray"}
+                placeholder="Procurar"
+                placeholderTextColor={"#a9a9a9"}
                 value={pesquisa}
                 onChangeText={setPesquisa}
                 />
@@ -33,18 +33,19 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 0,
         width: "100%",
-        height: "10%",
+        height: "12%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     searchinput:{
-        borderWidth: 2,
-        borderColor: "lightgray",
         width: "90%",
-        height: "45%",
-        borderRadius: 3,
-        backgroundColor: "white",
-        justifyContent: "center"
+        height: "40%",
+        borderRadius: 10,
+        backgroundColor: "#F8F8FF",
+        justifyContent: "center",
+        paddingLeft: 20,
+        borderColor: "lightgray",
+        borderWidth: 0.8,
     },
   
 })

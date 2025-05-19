@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import Footer from '@/components/Footer';
 
 type Midia = {
   uri: string;
@@ -90,6 +91,7 @@ export default function TelaPerfil() {
   };
 
   return (
+    <View style={styles.container}>
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.usernameHeader}>
@@ -182,6 +184,8 @@ export default function TelaPerfil() {
         </View>
       </View>
     </ScrollView>
+    <Footer/>
+    </View>
   );
 }
 
