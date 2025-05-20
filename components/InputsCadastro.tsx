@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, TextInput, StyleSheet, View } from "react-native";
 
-export default function InputNome(){
+export function InputNome(){
     const [nome, setNome] = useState('')
     
     return(

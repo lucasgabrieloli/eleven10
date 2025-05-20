@@ -1,8 +1,16 @@
 import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native'
 import {InputSenha, InputUsername} from '../components/InputsCadastro'
 import {GlobalStyles} from '../styles/GlobalStyles'
+import { useRouter } from 'expo-router'
+import { useState } from 'react'
 
 export default function TelaCadastro2(){
+ 
+    const router = useRouter()
+
+    const [username, setUsername] = useState('')
+    const [senha, setSenha] = useState('')
+
     return(
         <View style={styles.container}>
             
@@ -14,20 +22,29 @@ export default function TelaCadastro2(){
                     </View>
                 </View> 
                 <View style={styles.boxcad}>
-                    <Text style={styles.textaviso}>Apenas maiores de 18 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu CPF, Nome Completo ou Telefone no seu Perfil Atleta.</Text>
-                    <InputUsername/>
-                    <InputSenha/>
-                    <View style={styles.labels}>
+                    <Text style={styles.textaviso}>Apenas maiores de 14 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu Nome Completo ou Telefone no seu Perfil Atleta.</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Escolha seu Nome de Usuário:'
+                        placeholderTextColor= '#666'
+                        value={username}
+                        onChangeText={setUsername}
+                    />
 
-                    </View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder= 'Escolha sua senha:'
+                        placeholderTextColor="#666"
+                        secureTextEntry={true}
+                        value={senha}
+                        onChangeText={setSenha}
+                    />
+
                     <View style={styles.divbotoes}>
-                    <TouchableOpacity style={GlobalStyles.botaologin}><Text style={GlobalStyles.txtbut}>Voltar</Text></TouchableOpacity>
+                    <TouchableOpacity style={GlobalStyles.botaologin} onPress={()=>router.push('/TelaCadastro')}><Text style={GlobalStyles.txtbut}>Voltar</Text></TouchableOpacity>
                     <TouchableOpacity style={GlobalStyles.botaologin}><Text style={GlobalStyles.txtbut}>Continuar</Text></TouchableOpacity>
                     </View>
                 </View>
-
-               
-                  
         </View>
     )
 }
@@ -81,6 +98,13 @@ const styles = StyleSheet.create({
         gap: 30,
         justifyContent: 'center',
     },
-    labels:{},
+    input:{
+        borderWidth: 2,
+        borderColor: "lightgray",
+        width: "100%",
+        borderRadius: 3,
+        backgroundColor: "white",
+        marginTop: 35,
+    },  
 
 });

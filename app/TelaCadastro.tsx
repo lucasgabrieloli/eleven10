@@ -1,11 +1,41 @@
-import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native'
-import InputNome, {InputEmail, InputTelefone, InputCPF, InputDataNascimento} from '../components/InputsCadastro'
+import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {GlobalStyles} from '../styles/GlobalStyles'
 import { useRouter } from 'expo-router'
+import { useState } from 'react'
 
 export default function TelaCadastro(){
 
     const router = useRouter();
+
+    const [nome, setNome] = useState('')
+    const [email, setEmail] = useState('')
+    const [telefone, setTelefone] = useState('')
+    const [dataNascimento, setDataNascimento] = useState ('')
+
+    const isOver14 = (dateStr : string) => {
+    const [day, month, year] = dateStr.split('/').map(Number);
+    const birthDate = new Date(year, month - 1, day);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    return age > 14 || (age === 14 && m >= 0);
+    };
+
+    const validarCampos = () => {
+        if (!nome || !email || !telefone || !dataNascimento){
+            Alert.alert("Preencha todos os dados para continuar!")
+            router.push('/TelaCadastro')
+        }
+
+        else if (!isOver14){
+            Alert.alert("Você deve se maior que 14 anos para continuar!")
+            router.push('/TelaCadastro')
+        }
+        else{
+            router.push('/TelaCadastro2')
+        }
+    }
+
 
     return(
         <View style={styles.container}>
@@ -18,18 +48,44 @@ export default function TelaCadastro(){
                     </View>
                 </View> 
                 <View style={styles.boxcad}>
-                    <Text style={styles.textaviso}>Apenas maiores de 18 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu CPF, Nome Completo ou Telefone no seu Perfil Atleta.</Text>
-                    <InputNome/>
-                    <InputEmail/>
-                    <InputTelefone/>
-                    <InputCPF/>
-                    <InputDataNascimento/>
+                    <Text style={styles.textaviso}>Apenas maiores de 14 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu Nome Completo ou Telefone no seu Perfil Atleta.</Text>
+
+                        <TextInput
+                        style={styles.input}
+                        placeholder="Digite seu Nome Completo:"
+                        placeholderTextColor='#666'
+                        value={nome}
+                        onChangeText={setNome}/>
+
+                        <TextInput
+                        style={styles.input}
+                        placeholder = "Digite seu E-mail:"
+                        placeholderTextColor= '#666'
+                        value={email}
+                        onChangeText={setEmail}
+                        />
+
+                        <TextInput
+                        style={styles.input}
+                        placeholder= "Digite seu telefone:"
+                        placeholderTextColor= "#666"
+                        value={telefone}
+                        onChangeText={setTelefone}
+                        />
+
+                        <TextInput
+                        style={styles.input}
+                        placeholder = "Digite sua data de Nascimento:"
+                        placeholderTextColor= "#666"
+                        value={dataNascimento}
+                        onChangeText={setDataNascimento}
+                        />
 
                     <View style={styles.divbotoes}>
                     <TouchableOpacity style={GlobalStyles.botaologin} onPress={() => router.push('/TelaLogin')}>
                         <Text style={GlobalStyles.txtbut}>Voltar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={GlobalStyles.botaologin}>
+                    <TouchableOpacity style={GlobalStyles.botaologin} onPress={validarCampos}>
                         <Text style={GlobalStyles.txtbut}>Continuar</Text>
                     </TouchableOpacity>
                     </View>
@@ -61,7 +117,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '70%',
+        height: '55%',
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,
@@ -91,5 +147,13 @@ const styles = StyleSheet.create({
         gap: 30,
         justifyContent: 'center',
     },
+    input:{
+        borderWidth: 2,
+        borderColor: "lightgray",
+        width: "100%",
+        borderRadius: 3,
+        backgroundColor: "white",
+        marginTop: 35,
+    },  
 
 });

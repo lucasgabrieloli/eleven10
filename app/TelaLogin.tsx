@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
-    height: '60%',
+    height: '55%',
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 0.6, 
