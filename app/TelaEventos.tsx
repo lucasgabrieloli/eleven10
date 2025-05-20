@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   botaoEditar: {
-    backgroundColor: '#FFC107',
+    backgroundColor: '#3DB342',
     padding: 6,
     borderRadius: 6,
   },
