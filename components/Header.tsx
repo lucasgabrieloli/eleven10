@@ -16,10 +16,12 @@ export default function Header (){
                         style={styles.logoheader}
                     />
 
+                <TouchableOpacity style={styles.iconright}
+                onPress={()=> router.push('/TelaConfiguracoes')}>
                     <Image
                         source={require('../assets/images/settingsicon.png')}
-                        style={styles.iconright}
                     />
+                </TouchableOpacity>
                 </View>
                 <View style={styles.divbotao}>
                     <TouchableOpacity style={[styles.botaoheader, isActive('/TelaHypados') && styles.botaoativado]}
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         height: "45%",
+        marginTop: -7
     },
     logoheader:{
         width: "40%",
@@ -83,7 +86,8 @@ const styles = StyleSheet.create({
         height: "90%",
         alignItems: "center",
         justifyContent: "center",
-        flexDirection: "row"
+        flexDirection: "row",
+        marginTop: -15
     },
     iconright: {
         position: 'absolute',
@@ -93,5 +97,5 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         resizeMode: 'contain',
-}
+    }
 })

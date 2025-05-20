@@ -178,10 +178,11 @@ const styles = StyleSheet.create({
   scrollContainer: { padding: 16, paddingBottom: 80 },
   titulo: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
   boxTitulo: {
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#000',
     padding: 16,
     marginBottom: 20,
+    borderRadius: 10,
   },
   destaques: { fontWeight: 'bold', fontSize: 18, textAlign: 'center' },
   subtitulo: { color: 'green', fontSize: 14, textAlign: 'center' },
