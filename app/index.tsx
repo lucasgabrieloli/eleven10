@@ -8,6 +8,6 @@ import TelaEventos from "./TelaEventos";
 
 export default function App(){
   return(
-    <TelaCadastro/>
+    <TelaInicial/>
   )
 }

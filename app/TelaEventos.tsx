@@ -55,16 +55,16 @@ export default function TelaEventos() {
       setEventos((prev) =>
         prev.map((e) =>
           e.id === eventoEmEdicao
-            ? {
-                ...e,
-                nomeTime,
-                local,
-                horario,
-                categoria,
-                posicoes,
-                imagem,
-              }
-            : e
+?{
+...e,
+nomeTime,
+local,
+horario,
+categoria,
+posicoes,
+imagem,
+ }
+: e
         )
       );
     } else {
