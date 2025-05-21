@@ -6,17 +6,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import Footer from '@/components/Footer';
 
-type Midia = {
-  uri: string;
-  type: 'image' | 'video' | 'livePhoto' | 'pairedVideo' | undefined;
-  legenda: string;
-};
-
 export default function TelaPerfil() {
   const [curriculo, setCurriculo] = useState('');
   const [bioSalva, setCurriculoSalvo] = useState(false);
   const [editandoBio, setEditandoCurriculo] = useState(true);
-  const [media, setMedia] = useState<Midia[]>([]);
   const [perfilUri, setPerfilUri] = useState<string | null>(null);
   const [favoritos, setFavoritos] = useState<number>(0);
   const [favoritado, setFavoritado] = useState<number>(0);
@@ -24,8 +17,14 @@ export default function TelaPerfil() {
   const [favoritadoPorMim, setFavoritadoPorMim] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
 
-  const [midiaPreview, setMidiaPreview] = useState<Midia | null>(null);
-  const [legendaPreview, setLegendaPreview] = useState<string>('');
+  const [mostraSelecao, setMostraSelecao] = useState(false);
+  const [posicaoSelecionada, setPosicaoSelecionada] = useState<string | null>(null);
+  const [posicaoTemp, setPosicaoTemp] = useState<string | null>(null);
+
+  const posicoes = [
+    'Goleiro', 'Lateral Direito', 'Lateral Esquerdo', 'Zagueiro',
+    'Volante', 'Meio Campo', 'Ponta Esquerda', 'Ponta Direita', 'Centro Avante'
+  ];
 
   useEffect(() => {
     (async () => {
@@ -48,49 +47,6 @@ export default function TelaPerfil() {
     }
   };
 
-  const escolherMidia = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        setMidiaPreview({
-          uri: result.assets[0].uri,
-          type: result.assets[0].type as Midia['type'],
-          legenda: '',
-        });
-        setLegendaPreview('');
-      }
-    } catch (error) {
-      console.error('Erro ao escolher mídia:', error);
-    }
-  };
-
-  const postarMidia = () => {
-    if (midiaPreview) {
-      const novaMidia = { ...midiaPreview, legenda: legendaPreview };
-      setMedia((prev) => [...prev, novaMidia]);
-      setPosts((prev) => prev + 1);
-      setMidiaPreview(null);
-      setLegendaPreview('');
-    }
-  };
-
-  const cancelarPostagem = () => {
-    setMidiaPreview(null);
-    setLegendaPreview('');
-  };
-
-  const deletarMidia = (index: number) => {
-    const novaLista = [...media];
-    novaLista.splice(index, 1);
-    setMedia(novaLista);
-    setPosts(novaLista.length);
-  };
-
   const alternarFavorito = () => {
     if (favoritadoPorMim) {
       setFavoritado((prev) => prev - 1);
@@ -103,6 +59,16 @@ export default function TelaPerfil() {
   const salvarCurriculo = () => {
     setCurriculoSalvo(true);
     setEditandoCurriculo(false);
+  };
+
+  const confirmarPosicao = () => {
+    setPosicaoSelecionada(posicaoTemp);
+    setMostraSelecao(false);
+  };
+
+  const cancelarSelecao = () => {
+    setPosicaoTemp(posicaoSelecionada);
+    setMostraSelecao(false);
   };
 
   return (
@@ -125,18 +91,44 @@ export default function TelaPerfil() {
             )}
           </TouchableOpacity>
 
-          <View style={styles.countsContainer}>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Favoritos: </Text>{favoritos}</Text>
+            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Favoritado: </Text>{favoritado}</Text>
+            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Posts: </Text>{posts}</Text>
             <Text style={styles.countText}>
-              <Text style={{ fontWeight: 'bold' }}>Favoritos: </Text>{favoritos}
+              <Text style={{ fontWeight: 'bold' }}>Posição: </Text>{posicaoSelecionada || 'Nenhuma'}
             </Text>
-            <Text style={styles.countText}>
-              <Text style={{ fontWeight: 'bold' }}>Favoritado: </Text>{favoritado}
-            </Text>
-            <Text style={styles.countText}>
-              <Text style={{ fontWeight: 'bold' }}>Posts: </Text>{posts}
-            </Text>
+            <TouchableOpacity style={styles.posicaoButton} onPress={() => setMostraSelecao(true)}>
+              <Text style={styles.posicaoButtonText}>Selecionar posição</Text>
+            </TouchableOpacity>
           </View>
         </View>
+
+        {mostraSelecao && (
+          <View style={styles.selecaoContainer}>
+            {posicoes.map((posicao, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.radioItem}
+                onPress={() => setPosicaoTemp(posicao)}
+              >
+                <View style={styles.radioCircle}>
+                  {posicaoTemp === posicao && <View style={styles.radioInner} />}
+                </View>
+                <Text style={styles.radioLabel}>{posicao}</Text>
+              </TouchableOpacity>
+            ))}
+
+            <View style={styles.selecaoButtons}>
+              <TouchableOpacity style={styles.confirmar} onPress={confirmarPosicao}>
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.cancelar} onPress={cancelarSelecao}>
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
 
         <TouchableOpacity style={styles.favoriteButton} onPress={alternarFavorito}>
           <Text style={styles.favoriteText}>
@@ -156,69 +148,20 @@ export default function TelaPerfil() {
                 onChangeText={setCurriculo}
               />
               <TouchableOpacity style={styles.saveButton} onPress={salvarCurriculo}>
-                <Text style={styles.saveText}>Salvar Curriculo</Text>
+                <Text style={styles.saveText}>Salvar Currículo</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
               <Text style={styles.bioSavedText}>{curriculo}</Text>
               <TouchableOpacity onPress={() => setEditandoCurriculo(true)}>
-                <Text style={styles.editLink}>Editar Curriculo</Text>
+                <Text style={styles.editLink}>Editar Currículo</Text>
               </TouchableOpacity>
             </>
           )}
         </View>
 
         <View style={styles.separator} />
-
-        <View style={styles.postSection}>
-          <Text style={styles.sectionTitle}>Posts (fotos e vídeos)</Text>
-
-          {midiaPreview ? (
-            <View style={styles.previewContainer}>
-              <Image source={{ uri: midiaPreview.uri }} style={styles.previewImage} />
-              <TextInput
-                style={styles.captionInput}
-                placeholder="Escreva uma legenda..."
-                value={legendaPreview}
-                onChangeText={setLegendaPreview}
-              />
-              <View style={styles.previewButtons}>
-                <TouchableOpacity style={styles.confirmButton} onPress={postarMidia}>
-                  <Text style={styles.buttonText}>Postar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.cancelButton} onPress={cancelarPostagem}>
-                  <Text style={styles.buttonText}>Cancelar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            <TouchableOpacity style={styles.uploadButton} onPress={escolherMidia}>
-              <Text style={styles.uploadText}>+ Adicionar post</Text>
-            </TouchableOpacity>
-          )}
-
-          <View style={styles.mediaContainer}>
-            {media.map((item, index) => (
-              <View key={index} style={styles.mediaItem}>
-                {item.type === 'image' ? (
-                  <>
-                    <Image source={{ uri: item.uri }} style={styles.mediaPreview} />
-                    <Text style={styles.captionText}>{item.legenda}</Text>
-                    <TouchableOpacity
-                      style={styles.deleteButton}
-                      onPress={() => deletarMidia(index)}
-                    >
-                      <Ionicons name="trash" size={16} color="white" />
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <Text>Vídeo (preview futura)</Text>
-                )}
-              </View>
-            ))}
-          </View>
-        </View>
       </ScrollView>
       <Footer />
     </View>
@@ -240,8 +183,7 @@ const styles = StyleSheet.create({
   avatarSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
-    marginVertical: 16,
+    margin: 16,
   },
   avatar: {
     width: 90,
@@ -256,14 +198,75 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  countsContainer: {
+  detailsContainer: {
     marginLeft: 20,
-    justifyContent: 'space-around',
-    height: 90,
+    justifyContent: 'space-between',
+    height: 100,
   },
   countText: {
     fontSize: 14,
-    marginBottom: 4,
+  },
+  posicaoButton: {
+    backgroundColor: '#007bff',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
+  posicaoButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  selecaoContainer: {
+    marginHorizontal: 16,
+    marginVertical: 12,
+    backgroundColor: '#f9f9f9',
+    padding: 12,
+    borderRadius: 8,
+  },
+  radioItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  radioCircle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#007bff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  radioInner: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: '#007bff',
+  },
+  radioLabel: {
+    fontSize: 14,
+  },
+  selecaoButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 12,
+  },
+  confirmar: {
+    backgroundColor: '#0a7d26',
+    padding: 8,
+    borderRadius: 6,
+  },
+  cancelar: {
+    backgroundColor: '#cc0000',
+    padding: 8,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   favoriteButton: {
     alignSelf: 'center',
@@ -319,88 +322,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     marginVertical: 20,
     marginHorizontal: 16,
-  },
-  postSection: {
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  uploadButton: {
-    backgroundColor: '#0a7d26',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  uploadText: { color: 'white', fontWeight: 'bold' },
-  previewContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  previewImage: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
-  },
-  captionInput: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: '#aaa',
-    borderRadius: 6,
-    padding: 8,
-  },
-  previewButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  confirmButton: {
-    backgroundColor: '#0a7d26',
-    padding: 10,
-    borderRadius: 6,
-    flex: 1,
-    marginRight: 8,
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: '#ccc',
-    padding: 10,
-    borderRadius: 6,
-    flex: 1,
-    marginLeft: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontWeight: 'bold',
-  },
-  mediaContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  mediaItem: {
-    position: 'relative',
-    width: 100,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  mediaPreview: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-  },
-  captionText: {
-    fontSize: 12,
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  deleteButton: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 12,
-    padding: 2,
   },
 });
