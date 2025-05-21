@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '40%',
+        height: 330,
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,

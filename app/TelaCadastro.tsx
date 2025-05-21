@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, Alert} from 'react-native'
 import {GlobalStyles} from '../styles/GlobalStyles'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
@@ -28,7 +28,7 @@ export default function TelaCadastro(){
         }
 
         else if (!isOver14){
-            Alert.alert("Você deve se maior que 14 anos para continuar!")
+            Alert.alert("Você deve ser maior que 14 anos para continuar!")
             router.push('/TelaCadastro')
         }
         else{
@@ -71,6 +71,7 @@ export default function TelaCadastro(){
                         placeholderTextColor= "#666"
                         value={telefone}
                         onChangeText={setTelefone}
+                        keyboardType= "phone-pad"
                         />
 
                         <TextInput
@@ -79,6 +80,7 @@ export default function TelaCadastro(){
                         placeholderTextColor= "#666"
                         value={dataNascimento}
                         onChangeText={setDataNascimento}
+                        keyboardType="number-pad"
                         />
 
                     <View style={styles.divbotoes}>
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     boxcad:{
         backgroundColor: "white",
         width: '76%',
-        height: '55%',
+        height: 480,
         borderColor: 'gray',
         borderWidth: 0.6, 
         borderRadius: 10,

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
 import Footer from "@/components/Footer";
 import { useState } from "react";
 
@@ -9,6 +9,12 @@ export default function TelaPesquisa(){
     return(
         <View style={styles.root}>
             <View style={styles.header}>
+                <TouchableOpacity style={styles.iconleft}>
+                    <Image
+                    source={require('../assets/images/setavoltar.png')}
+                    style={styles.iconleft}
+                    />
+                </TouchableOpacity>
                 <TextInput
                 style={styles.searchinput}
                 placeholder="Procurar"
@@ -38,7 +44,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     searchinput:{
-        width: "90%",
+        width: "60%",
         height: "40%",
         borderRadius: 10,
         backgroundColor: "#F8F8FF",
@@ -47,5 +53,14 @@ const styles = StyleSheet.create({
         borderColor: "lightgray",
         borderWidth: 0.8,
     },
+    iconleft: {
+        position: 'absolute',
+        left: 16,
+        top: '50%',
+        transform: [{ translateY: -12 }],
+        width: 25,
+        height: 25,
+        resizeMode: 'contain',
+    }
   
 })

@@ -1,10 +1,16 @@
-import { View, TouchableOpacity, Image, StyleSheet } from "react-native"
+import { View, TouchableOpacity, Image, StyleSheet, Text } from "react-native"
 import { useRouter, usePathname } from "expo-router"
-           
+import { useState } from "react"
+
 export default function Footer() {
 
     const router = useRouter()
     const pathname = usePathname()
+    const [visivel, setVisivel] = useState(false)
+
+    function toogleMenu(){
+        setVisivel(!visivel)
+    }
 
     return(
     <View style={styles.footer}>
@@ -22,22 +28,6 @@ export default function Footer() {
                 />
             </TouchableOpacity>
             <TouchableOpacity style={styles.otherbotao}
-            onPress ={()=> router.push('/TelaEventos')}>
-                <Image
-                source={
-                    pathname === "/TelaEventos" ? require('../assets/images/eventosicon_ativado.png')
-                    : require('../assets/images/eventosicon.png')
-                }
-                style={styles.otherimg}
-                />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.maisbotao}>
-                <Image
-                source={require('../assets/images/maisimg.png')}
-                style={styles.maisimg}
-                />
-            </TouchableOpacity>      
-            <TouchableOpacity style={styles.otherbotao}
             onPress={()=> router.push('/TelaPesquisa')}>
                 <Image
                     source={
@@ -45,7 +35,24 @@ export default function Footer() {
                         : require('../assets/images/searchicon.png')
                     }
                     style={styles.otherimg}
+            />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.maisbotao}
+            onPress={toogleMenu}>
+                <Image
+                source={require('../assets/images/maisimg.png')}
+                style={styles.maisimg}
                 />
+            </TouchableOpacity>      
+            <TouchableOpacity style={styles.otherbotao}
+            onPress ={()=> router.push('/TelaEventos')}>
+                <Image
+                source={
+                    pathname === "/TelaEventos" ? require('../assets/images/eventosicon_ativado.png')
+                    : require('../assets/images/eventosicon.png')
+                }
+                style={styles.otherimg}
+            />
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.otherbotao}
@@ -59,6 +66,18 @@ export default function Footer() {
                 style={styles.otherimg}
                 />
             </TouchableOpacity>
+
+            {visivel && (
+                <View style={styles.menufl}>
+                    <TouchableOpacity style={styles.botmenufl}>
+                        <Text style={styles.textmenfl}>Novo Evento</Text>
+                    </TouchableOpacity>
+                    <View style={styles.linha}></View>
+                    <TouchableOpacity style={styles.botmenufl}>
+                        <Text style={styles.textmenfl}>Nova Mídia</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     </View>
 )
@@ -107,6 +126,33 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
+    menufl:{
+        width: "30%",
+        height: "150%",
+        position: "absolute",
+        left: "35%",
+        bottom: "110%",
+        borderColor: "#a9a9a9",
+        borderWidth: 1,
+        borderRadius: 15,
+        backgroundColor: "#3db342"
+    },
+    botmenufl:{
+        height:"50%",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    linha:{
+        width: "100%",
+        height: 0.7,
+        backgroundColor: "black"
+    },
+    textmenfl:{
+        fontSize: 15,
+        fontWeight: 700,
+        color: "white"
+    }
 
 })
 

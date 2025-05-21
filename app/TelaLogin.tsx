@@ -1,12 +1,24 @@
-import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity} from 'react-native';
-import {InputEmail, InputSenha} from '../components/InputsCadastro'
+import {View, Text, StyleSheet, TextInput, Image, ImageBackground, TouchableOpacity, Alert} from 'react-native';
 import {GlobalStyles} from '../styles/GlobalStyles';
 import TelaCadastro from './TelaCadastro';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 
 export default function TelaLogin(){
 
   const router = useRouter();
+
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+
+  const validarCampos = () =>{
+    if( !email || !senha){
+      Alert.alert('Preencha os campos com seu E-mail e sua Senha ELEVEN10')
+    }
+    else{
+      router.push('/TelaInicial')
+    }
+  }
 
   return(
     
@@ -19,30 +31,33 @@ export default function TelaLogin(){
         <Text style={styles.textlogin}>Login</Text>  
 
         <View style={styles.divinputs}>
-          <InputEmail/>
-          <InputSenha/>
+          <TextInput
+          style={styles.input}
+          placeholder='Digite seu E-mail:'
+          placeholderTextColor="#666"
+          value={email}
+          onChangeText={setEmail}
+          />
+
+          <TextInput
+          style={styles.input}
+          placeholder= "Digite sua Senha:"
+          placeholderTextColor="#666"
+          secureTextEntry={true}
+          value={senha}
+          onChangeText={setSenha}
+          />
         </View>
 
         <TouchableOpacity 
           style={GlobalStyles.botaologin}>
-          <Text style={GlobalStyles.txtbut}>Entrar</Text>
+          <Text style={GlobalStyles.txtbut} onPress={validarCampos}>Entrar</Text>
         </TouchableOpacity>
 
         <Text style={styles.txtcad}>Não tem uma conta?</Text> 
         <TouchableOpacity style={styles.botcads}
         onPress={() => router.push('/TelaCadastro')}
         ><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.botaologin2}>
-            <View style={styles.botgooglelogin}>
-              <Image
-              source={require("../assets/images/googleiconlogin.png")}
-              style={styles.icongoogle}
-              />
-              <Text style={styles.txtbut2}>Entre com o Google!</Text>
-            </View>
-        </TouchableOpacity>
 
         
       </View>  
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
   boxlogin: {
     backgroundColor: "white",
     width: '76%',
-    height: '55%',
+    height: 400,
     alignItems: 'center',
     borderColor: 'gray',
     borderWidth: 0.6, 
@@ -79,54 +94,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 15
   },
-  botgooglelogin:{
-    flexDirection: "row",
-  },
-  botaologin2:{
-    width: '80%',
-    height: '8%',
-    borderWidth: 2,
-    borderColor: 'black',
-    alignItems:'center',
-    justifyContent: 'center',
-    marginTop:30,
-    padding: 0,
-    position: "relative",
-    borderRadius: 5,
-  },
-  txtbut2:{
-    textAlign: "center",
-    width:"100%"
-  },  
-  icongoogle:{
-    height: "90%",
-    width: "8%",
-    position: "absolute",
-    left: 16
-  },
   botcads:{
-    width: 90,
+    width: "100%",
     height: 18,
     alignItems: "center",
     justifyContent: "center",
-    padding: 0,
-  },
+    },
   txtbotcads:{
     color: "green",
     fontSize: 15,
     fontWeight: 800,
   },
   input:{
-    width:'70%',
-    marginTop:'10%',
-    marginLeft:0,
-    marginRight:0,
-    borderBottomWidth:1,
-    fontSize: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 2,
-  },
+    borderWidth: 2,
+    borderColor: "lightgray",
+    width: "100%",
+    borderRadius: 3,
+    backgroundColor: "white",
+    marginTop: 35,
+    },  
   divinputs:{
     width: '90%',
   }
