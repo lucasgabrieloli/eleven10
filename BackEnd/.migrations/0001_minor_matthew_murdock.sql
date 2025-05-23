@@ -1,1 +1,0 @@
-ALTER TABLE "usuario" ALTER COLUMN "id_usuario" SET DATA TYPE text;

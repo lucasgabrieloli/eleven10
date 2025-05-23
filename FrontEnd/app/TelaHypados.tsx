@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
 export default function TelaInicial (){
@@ -11,7 +10,7 @@ export default function TelaInicial (){
         <View style={styles.root}>
             <Header/>
             
-            <Footer/>
+
         </View>
     )
 }

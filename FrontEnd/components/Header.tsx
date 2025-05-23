@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 90,
         position: "absolute",
+        backgroundColor: "#fff",
+        zIndex: 100
     },
     divbotao:{
         width: "100%",

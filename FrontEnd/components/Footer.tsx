@@ -13,29 +13,21 @@ export default function Footer() {
         setVisivel(!visivel)
     }
 
-    const [media, setMedia] = useState < string | null>(null)
-    const [type, setType] = useState < 'image' | 'video' | null>(null)
-    
-    const pickImage = async () =>{
-        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if(!permission.granted){
-            alert("Permissão para acessar a galeria é necessária!")
-            return;
-        }
-    
+    async function pickMedia(){
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: false,
             quality: 1,
         })
-    
-        if(!result.canceled){
-            const selected = result.assets[0]
-            setMedia (selected.uri);
-            setType (selected.type as 'image' | 'video') 
-        }
+
+    if(!result.canceled){
+        const asset = result.assets[0]
+        router.push({
+            pathname: '/CriarPosts',
+            params:{uri: asset.uri, type: asset.type },
+        })
     }
     
+}
 
     return(
     <View style={styles.footer}>
@@ -98,7 +90,8 @@ export default function Footer() {
                         <Text style={styles.textmenfl}>Novo Evento</Text>
                     </TouchableOpacity>
                     <View style={styles.linha}></View>
-                    <TouchableOpacity style={styles.botmenufl}>
+                    <TouchableOpacity style={styles.botmenufl} onPress={()=> {pickMedia(); toogleMenu()}
+                    }>
                         <Text style={styles.textmenfl}>Nova Mídia</Text>
                     </TouchableOpacity>
                 </View>

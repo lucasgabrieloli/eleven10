@@ -167,8 +167,6 @@ imagem,
           </View>
         )}
       </ScrollView>
-
-      <Footer />
     </View>
   );
 }

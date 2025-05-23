@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
-import Footer from "@/components/Footer";
 import { useState } from "react";
 
 export default function TelaPesquisa(){
@@ -24,7 +23,6 @@ export default function TelaPesquisa(){
                 />
             </View>
 
-            <Footer/>
         </View>
     )
 
