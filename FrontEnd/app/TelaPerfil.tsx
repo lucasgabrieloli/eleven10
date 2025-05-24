@@ -22,7 +22,7 @@ export default function TelaPerfil() {
 
   const posicoes = [
     'Goleiro', 'Lateral Direito', 'Lateral Esquerdo', 'Zagueiro',
-    'Volante', 'Meio Campo', 'Ponta Esquerda', 'Ponta Direita', 'Centro Avante'
+    'Volante', 'Meio Campo', 'Ponta Esquerda', 'Ponta Direita', 'Centro-Avante'
   ];
 
   useEffect(() => {
@@ -203,14 +203,17 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 14,
+    marginTop: 3,
   },
   posicaoButton: {
-    backgroundColor: '#007bff',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    backgroundColor: '#3DB342',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 6,
-    alignSelf: 'flex-start',
-    marginTop: 4,
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginLeft: 3,
+    marginTop: 15,
   },
   posicaoButtonText: {
     color: '#fff',
@@ -231,7 +234,7 @@ const styles = StyleSheet.create({
   radioCircle: {
     height: 20,
     width: 20,
-    borderRadius: 10,
+    borderRadius: 6,
     borderWidth: 2,
     borderColor: '#007bff',
     alignItems: 'center',
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
   radioInner: {
     height: 10,
     width: 10,
-    borderRadius: 5,
+    borderRadius: 6,
     backgroundColor: '#007bff',
   },
   radioLabel: {
@@ -268,11 +271,13 @@ const styles = StyleSheet.create({
   },
   favoriteButton: {
     alignSelf: 'center',
-    backgroundColor: '#007bff',
+    alignItems: 'center',
+    backgroundColor: '#3DB342',
     paddingVertical: 6,
     paddingHorizontal: 20,
-    borderRadius: 8,
+    borderRadius: 6,
     marginBottom: 20,
+    marginTop: 30,
   },
   favoriteText: {
     color: 'white',
@@ -285,7 +290,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 5,
   },
   bioInput: {
     borderWidth: 1,
