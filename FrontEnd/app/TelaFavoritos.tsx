@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import Header from "@/components/Header";
 import { usePost } from "@/PostContext";
+import Footer from "@/components/Footer";
 
 export default function TelaInicial() {
     const router = useRouter();
@@ -13,6 +14,7 @@ export default function TelaInicial() {
             <View style={styles.centerContent}>
                 <Text style={styles.text}>Não Existe item nos Favoritos ainda</Text>
             </View>
+        <Footer/> 
         </View>
     );
 }
@@ -30,6 +32,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 24,
         fontWeight: "900",
-        marginBottom: 20, // Espaço entre o texto e o ActivityIndicator
+        marginBottom: 20,
     }
 });

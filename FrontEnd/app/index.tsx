@@ -10,7 +10,6 @@ import TelaPesquisa from "./TelaPesquisa";
 export default function App() {
   return (
     <TelaInicial/>
-
   )
 
 }

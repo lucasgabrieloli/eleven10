@@ -1,12 +1,13 @@
-import { Slot } from 'expo-router';
-import { PostProvider } from '../PostContext'; 
-import Footer from '../components/Footer';   
+import { Slot, usePathname } from 'expo-router';
+import { PostProvider } from '../PostContext';
 
 export default function Layout() {
+
+  const pathname = usePathname()
+
   return (
     <PostProvider>
       <Slot/>  
-      <Footer/> 
     </PostProvider>
   );
 }

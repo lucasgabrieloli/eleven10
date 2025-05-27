@@ -211,7 +211,7 @@ export default function TelaEventos() {
           </View>
         )}
       </ScrollView>
-      <Footer />
+      <Footer/> 
     </KeyboardAvoidingView>
   );
 }

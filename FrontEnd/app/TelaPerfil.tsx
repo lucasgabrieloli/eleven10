@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import Footer from '@/components/Footer';
 
 export default function TelaPerfil() {
   const [curriculo, setCurriculo] = useState('');
@@ -162,6 +163,7 @@ export default function TelaPerfil() {
 
         <View style={styles.separator} />
       </ScrollView>
+    <Footer/> 
     </View>
   );
 }

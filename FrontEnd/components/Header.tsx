@@ -34,12 +34,12 @@ export default function Header (){
                         onPress={()=> router.push('/TelaInicial')}>
                         <Text style={[styles.textbotao, isActive('/TelaInicial') && styles.textbotaoativado]}>Para você</Text>
                     </TouchableOpacity>
-{/* 
+
                     <TouchableOpacity 
                     style={[styles.botaoheader, isActive('/TelaFavoritos') && styles.botaoativado]}
                         onPress={()=> router.push('/TelaFavoritos')}>
                         <Text style={[styles.textbotao, isActive('/TelaFavoritos') && styles.textbotaoativado]}>Favoritos</Text>
-                    </TouchableOpacity>  */}
+                    </TouchableOpacity>  
                 </View> 
             </View>
     )

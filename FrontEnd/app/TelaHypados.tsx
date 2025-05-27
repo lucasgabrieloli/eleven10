@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Fla
 import Header from "@/components/Header";
 import PostItem from "@/components/Posts";
 import { usePost, PostProvider } from "@/PostContext";
+import Footer from "@/components/Footer";
 
 export default function TelaHypados() {
 
@@ -28,6 +29,7 @@ export default function TelaHypados() {
                 />
 
             </View>
+        <Footer/>
         </PostProvider>
     )
 }

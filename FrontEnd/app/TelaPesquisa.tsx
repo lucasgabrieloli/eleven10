@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList } from "react-native";
 import { useState } from "react";
 import { usePost } from "@/PostContext";
+import Footer from "@/components/Footer";
 
 export default function TelaPesquisa() {
   const [pesquisa, setPesquisa] = useState("");
@@ -40,6 +41,7 @@ export default function TelaPesquisa() {
           </View>
         )}
       />
+    <Footer/>
     </View>
   );
 }
