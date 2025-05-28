@@ -1,17 +1,11 @@
 import { View, TouchableOpacity, Image, StyleSheet, Text } from "react-native"
 import { useRouter, usePathname } from "expo-router"
-import { useState } from "react"
 import * as ImagePicker from 'expo-image-picker'
 
 export default function Footer() {
 
     const router = useRouter()
     const pathname = usePathname()
-    const [visivel, setVisivel] = useState(false)
-
-    function toogleMenu() {
-        setVisivel(!visivel)
-    }
 
     async function pickMedia() {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -65,7 +59,7 @@ export default function Footer() {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.maisbotao}
-                    onPress={toogleMenu}>
+                    onPress={pickMedia}>
                     <Image
                         source={require('../assets/images/maisimg.png')}
                         style={styles.maisimg}
@@ -93,19 +87,6 @@ export default function Footer() {
                         style={styles.otherimg}
                     />
                 </TouchableOpacity>
-
-                {visivel && (
-                    <View style={styles.menufl}>
-                        <TouchableOpacity style={styles.botmenufl}>
-                            <Text style={styles.textmenfl}>Novo Evento</Text>
-                        </TouchableOpacity>
-                        <View style={styles.linha}></View>
-                        <TouchableOpacity style={styles.botmenufl} onPress={() => { pickMedia(); toogleMenu() }
-                        }>
-                            <Text style={styles.textmenfl}>Nova Mídia</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
             </View>
         </View>
     )

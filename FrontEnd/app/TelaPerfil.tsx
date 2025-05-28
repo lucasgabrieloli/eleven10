@@ -5,8 +5,11 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import Footer from '@/components/Footer';
+import { useRouter } from 'expo-router';
 
 export default function TelaPerfil() {
+
+  const router = useRouter();
   const [curriculo, setCurriculo] = useState('');
   const [bioSalva, setCurriculoSalvo] = useState(false);
   const [editandoBio, setEditandoCurriculo] = useState(true);
@@ -76,8 +79,14 @@ export default function TelaPerfil() {
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.usernameHeader}>
-            {username || 'Usuário sem username'}
+            {username || 'Usuário sem username'}   
           </Text>
+          <TouchableOpacity style={styles.iconright}
+            onPress={()=> router.push('/TelaConfiguracoes')}>
+            <Image
+            source={require('../assets/images/settingsicon.png')}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.avatarSection}>
@@ -328,4 +337,14 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     marginHorizontal: 16,
   },
+  iconright: {
+    position: 'absolute',
+    right: 15,
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+    top: 23
+  },
+
+
 });
