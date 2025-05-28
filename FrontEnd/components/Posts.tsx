@@ -121,12 +121,14 @@ const styles = StyleSheet.create({
     gap: 50,
     borderBottomColor: "black",
     borderBottomWidth: 0.5,
-    padding: 13
+    padding: 13,
+    backgroundColor: "white",
   },
   linha:{
     height: "100%",
     width: 1,
-    backgroundColor: "#a9a9a9"
+    backgroundColor: "#a9a9a9",
+    marginLeft: -25
   }
 });
 

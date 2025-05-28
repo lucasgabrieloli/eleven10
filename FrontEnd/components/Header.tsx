@@ -41,9 +41,9 @@ export default function Header (){
 const styles = StyleSheet.create({
     header:{
         width: "100%",
-        height: 90,
+        height: 100,
         position: "absolute",
-        backgroundColor: "#fff",
+        backgroundColor: "white",
         zIndex: 100,
     },
     divbotao:{
@@ -51,30 +51,35 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         height: "45%",
-        marginTop: -7
+        marginTop: -7,
+        gap: 25,
     },
     logoheader:{
         width: "40%",
-        height: "40%"
+        height: "40%",
+        marginBottom: 10,
+        marginTop: 10
     },
     textbotao:{
         color: "gray"
     },
     textbotaoativado:{
-        color: "#3db342",
+        color: "#ffffff",
         fontWeight: 700,
     },
     botaoheader:{
         width: "25%",
         height: "60%",
-        borderWidth: 2,
+        borderWidth: 1,
         justifyContent: "center",
         alignItems: "center",
         borderColor: "gray",
+        borderRadius: 20,
     },
     botaoativado:{
-        borderColor: "green",
+        borderColor: "#3db342",
         fontWeight: 800,
+        backgroundColor: "#3db342"
     },
     linhaheader:{
         width: "100%",
