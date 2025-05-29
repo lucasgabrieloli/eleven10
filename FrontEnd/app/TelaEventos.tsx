@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet, ScrollView, KeyboardAvoidingView, Platform,
+  View, Text, TextInput, TouchableOpacity, FlatList, Image, StyleSheet,
+  ScrollView, KeyboardAvoidingView, Platform
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
 import Footer from '@/components/Footer';
+import { useNavigation } from '@react-navigation/native';
 
 type Evento = {
   id: string;
@@ -39,7 +41,6 @@ export default function TelaEventos() {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') return;
-
       const location = await Location.getCurrentPositionAsync({});
       setMapRegion({
         latitude: location.coords.latitude,
@@ -140,11 +141,11 @@ export default function TelaEventos() {
     <View style={styles.card}>
       {item.imagem && <Image source={{ uri: item.imagem }} style={styles.imagemEvento} />}
       <View style={styles.info}>
-        <Text style={styles.infoTexto}>Time: {item.nomeTime}</Text>
-        <Text style={styles.infoTexto}>Local: {item.local}</Text>
-        <Text style={styles.infoTexto}>Horário: {item.horario}</Text>
-        <Text style={styles.infoTexto}>Categoria: {item.categoria}</Text>
-        <Text style={styles.infoTexto}>Posições: {item.posicoes}</Text>
+        <Text style={styles.tituloEvento}>{item.nomeTime}</Text>
+        <Text style={styles.infoTexto}>📍 {item.local}</Text>
+        <Text style={styles.infoTexto}>⏰ {item.horario}</Text>
+        <Text style={styles.tag}>Categoria: {item.categoria}</Text>
+        <Text style={styles.tag}>Posições: {item.posicoes}</Text>
 
         <View style={styles.botoesAcoes}>
           <TouchableOpacity onPress={() => editarEvento(item)} style={styles.botaoEditar}>
@@ -161,23 +162,23 @@ export default function TelaEventos() {
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.titulo}>PENEIRAS</Text>
+        <Text style={styles.titulo}>📣 Peneiras Disponíveis</Text>
 
         <View style={styles.boxTitulo}>
           <Text style={styles.destaques}>Destaques do momento</Text>
-          <Text style={styles.subtitulo}>Encontre sua próxima oportunidade</Text>
+          <Text style={styles.subtitulo}>Encontre sua próxima oportunidade no futebol</Text>
         </View>
 
         <FlatList
           data={eventos}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          contentContainerStyle={{ gap: 10 }}
+          contentContainerStyle={{ gap: 16 }}
           scrollEnabled={false}
         />
 
         <TouchableOpacity onPress={() => { setCriando(true); limparFormulario(); }} style={styles.botaoCriar}>
-          <Text style={styles.textoBotaoCriar}>Criar Evento</Text>
+          <Text style={styles.textoBotaoCriar}>+ Criar Evento</Text>
         </TouchableOpacity>
 
         {criando && (
@@ -187,10 +188,7 @@ export default function TelaEventos() {
             <TextInput
               placeholder="Horário (ex: 14:30)"
               value={horario}
-              onChangeText={(text) => {
-                const apenasNumerosComDoisPontos = text.replace(/[^0-9:]/g, '');
-                setHorario(apenasNumerosComDoisPontos);
-              }}
+              onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))}
               style={styles.input}
               keyboardType="numeric"
             />
@@ -211,86 +209,140 @@ export default function TelaEventos() {
           </View>
         )}
       </ScrollView>
-      <Footer/> 
+      <Footer />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#fff' },
+  root: { flex: 1, backgroundColor: '#F4F7F9' },
   scrollContainer: { padding: 16, paddingBottom: 100 },
-  titulo: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
-  boxTitulo: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 16,
+  titulo: {
+    fontSize: 26,
+    fontWeight: '700',
+    textAlign: 'center',
     marginBottom: 20,
-    borderRadius: 12,
-    backgroundColor: '#f9f9f9',
+    color: '#222',
   },
-  destaques: { fontWeight: 'bold', fontSize: 18, textAlign: 'center' },
-  subtitulo: { color: 'green', fontSize: 14, textAlign: 'center' },
+  boxTitulo: {
+    padding: 16,
+    marginBottom: 24,
+    borderRadius: 16,
+    backgroundColor: '#E6F2EC',
+  },
+  destaques: { fontWeight: '700', fontSize: 18, textAlign: 'center', color: '#1A5D3F' },
+  subtitulo: { fontSize: 14, textAlign: 'center', color: '#4A4A4A', marginTop: 4 },
   card: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: '#fdfdfd',
+    borderRadius: 14,
+    padding: 14,
+    backgroundColor: '#fff',
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+    gap: 10,
+  },
+  imagemEvento: { width: 90, height: 90, borderRadius: 10, backgroundColor: '#eee' },
+  info: { flex: 1, justifyContent: 'space-between' },
+  tituloEvento: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 6,
+    color: '#2B2B2B',
+  },
+  infoTexto: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 2,
+  },
+  tag: {
+    fontSize: 13,
+    color: '#3A7D44',
+    backgroundColor: '#E1F3E8',
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: 4,
+    marginTop: 4,
+    alignSelf: 'flex-start',
+  },
+  botoesAcoes: {
+    flexDirection: 'row',
+    marginTop: 10,
+    gap: 8,
+  },
+  botaoEditar: {
+    backgroundColor: '#00B386',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  botaoExcluir: {
+    backgroundColor: '#E74C3C',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  textoBotaoPequeno: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  botaoCriar: {
+    backgroundColor: '#1A5D3F',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 28,
+  },
+  textoBotaoCriar: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 15,
+  },
+  boxCriacao: {
+    backgroundColor: '#fff',
+    padding: 18,
+    marginTop: 20,
+    borderRadius: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
     shadowRadius: 4,
     elevation: 2,
   },
-  imagemEvento: { width: 80, height: 80, borderRadius: 8, marginRight: 12, backgroundColor: '#ccc' },
-  info: { flex: 1 },
-  infoTexto: { fontSize: 14, marginBottom: 4 },
-  botoesAcoes: { flexDirection: 'row', marginTop: 8, gap: 8 },
-  botaoEditar: { backgroundColor: '#3DB342', padding: 6, borderRadius: 6 },
-  botaoExcluir: { backgroundColor: '#F44336', padding: 6, borderRadius: 6 },
-  textoBotaoPequeno: { color: '#fff', fontWeight: 'bold' },
-  botaoCriar: {
-    backgroundColor: '#4CAF50',
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  textoBotaoCriar: { color: '#FFF', fontWeight: 'bold' },
-  boxCriacao: {
-    borderWidth: 1,
-    borderColor: '#bbb',
-    borderRadius: 12,
-    padding: 16,
-    marginTop: 20,
-    backgroundColor: '#fefefe',
-  },
   input: {
     borderWidth: 1,
-    borderColor: '#CCC',
+    borderColor: '#D0D0D0',
     borderRadius: 8,
     padding: 10,
     marginBottom: 12,
+    backgroundColor: '#FAFAFA',
   },
   map: {
     height: 200,
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 12,
   },
   botaoImagem: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#007BFF',
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: 'center',
   },
-  textoBotaoImagem: { color: '#fff', fontWeight: 'bold' },
+  textoBotaoImagem: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   botaoSalvar: {
-    backgroundColor: '#000',
+    backgroundColor: '#1A1A1A',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
   },
-  textoSalvar: { color: '#FFF', fontWeight: 'bold' },
+  textoSalvar: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
