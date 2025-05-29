@@ -2,6 +2,9 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableHighlight } f
 import { useState } from "react";
 import { Video } from "expo-av";
 import { Post } from "@/PostContext";
+import { useRouter } from "expo-router";
+
+  const router = useRouter()
 
 type PostItemProps = {
   item: Post;
@@ -26,11 +29,13 @@ function PostItem({ item } : PostItemProps){
     <View style={styles.post}>
       {/* Perfil */}
       <View style={styles.profileContainer}>
+        <TouchableOpacity style={styles.botaoperfil} onPress={()=>router.push('/TelaPerfil2')}>
         <Image
           source={{ uri: item.userProfilePicture  }}
           style={styles.profileImage}
         />
         <Text style={styles.profileName}>{item.userName || "Usuário"}</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Mídia */}
@@ -75,13 +80,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "#fff",
     padding: 10,
-    height: 320,
-    width: 320,
+    height: 350,
+    width: 300,
   },
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
+  },
+  botaoperfil:{
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10
   },
   profileImage: {
     width: 40,

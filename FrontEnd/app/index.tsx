@@ -6,8 +6,7 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/
 import TelaPerfil from "./TelaPerfil";
 import TelaEventos from "./TelaEventos";
 import TelaPesquisa from "./TelaPesquisa";
-import NavegacaoHorizontal from './NavegaçãoHorizontal';
 
 export default function Home() {
-  return <NavegacaoHorizontal/>;
+  return <TelaInicial/>;
 }
