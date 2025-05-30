@@ -89,7 +89,7 @@ export default function TelaLogin() {
 
           <Text style={styles.txtcad}>Não tem uma conta?</Text>
           <TouchableOpacity style={styles.botcads}
-            onPress={() => router.push('/TelaCadastro')}
+            onPress={() => router.push('/verificacaoOlheiro')}
           ><Text style={styles.txtbotcads}>Cadastre-se!</Text></TouchableOpacity>
 
 

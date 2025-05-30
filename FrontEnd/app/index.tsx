@@ -6,7 +6,8 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/
 import TelaPerfil from "./TelaPerfil";
 import TelaEventos from "./TelaEventos";
 import TelaPesquisa from "./TelaPesquisa";
+import VerificacaoOlheiro from "./verificacaoOlheiro";
 
-export default function Home() {
-  return <TelaInicial/>;
+export default function(){
+  return <VerificacaoOlheiro/>
 }
