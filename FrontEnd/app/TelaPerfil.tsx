@@ -8,26 +8,16 @@ import Footer from '@/components/Footer';
 import { useRouter } from 'expo-router';
 
 export default function TelaPerfil() {
-
   const router = useRouter();
-  const [curriculo, setCurriculo] = useState('');
-  const [bioSalva, setCurriculoSalvo] = useState(false);
-  const [editandoBio, setEditandoCurriculo] = useState(true);
+
+  const [bio, setBio] = useState('');
+  const [editandoBio, setEditandoBio] = useState(true);
   const [perfilUri, setPerfilUri] = useState<string | null>(null);
   const [favoritos, setFavoritos] = useState<number>(0);
   const [favoritado, setFavoritado] = useState<number>(0);
   const [posts, setPosts] = useState<number>(0);
   const [favoritadoPorMim, setFavoritadoPorMim] = useState<boolean>(false);
-  const [username, setUsername] = useState<string | null>(null);
-
-  const [mostraSelecao, setMostraSelecao] = useState(false);
-  const [posicaoSelecionada, setPosicaoSelecionada] = useState<string | null>(null);
-  const [posicaoTemp, setPosicaoTemp] = useState<string | null>(null);
-
-  const posicoes = [
-    'Goleiro', 'Lateral Direito', 'Lateral Esquerdo', 'Zagueiro',
-    'Volante', 'Meio Campo', 'Ponta Esquerda', 'Ponta Direita', 'Centro-Avante'
-  ];
+  const [username, setUsername] = useState<string>('usuario_exemplo');
 
   useEffect(() => {
     (async () => {
@@ -51,148 +41,135 @@ export default function TelaPerfil() {
   };
 
   const alternarFavorito = () => {
-    if (favoritadoPorMim) {
-      setFavoritado((prev) => prev - 1);
-    } else {
-      setFavoritado((prev) => prev + 1);
-    }
     setFavoritadoPorMim(!favoritadoPorMim);
+    setFavoritado(prev => favoritadoPorMim ? prev - 1 : prev + 1);
   };
 
-  const salvarCurriculo = () => {
-    setCurriculoSalvo(true);
-    setEditandoCurriculo(false);
-  };
-
-  const confirmarPosicao = () => {
-    setPosicaoSelecionada(posicaoTemp);
-    setMostraSelecao(false);
-  };
-
-  const cancelarSelecao = () => {
-    setPosicaoTemp(posicaoSelecionada);
-    setMostraSelecao(false);
+  const salvarBio = () => {
+    setEditandoBio(false);
+    Alert.alert('Sucesso', 'Currículo salvo com sucesso!');
   };
 
   return (
     <View style={styles.container}>
       <ScrollView>
+
+        {/* Header com username */}
         <View style={styles.header}>
-          <Text style={styles.usernameHeader}>
-            {username || 'Usuário sem username'}   
-          </Text>
-          <TouchableOpacity style={styles.iconright}
-            onPress={()=> router.push('/TelaConfiguracoes')}>
-            <Image
-            source={require('../assets/images/settingsicon.png')}
-            />
+          <Text style={styles.usernameHeader}>{username}</Text>
+          <TouchableOpacity style={styles.iconright} onPress={() => router.push('/TelaConfiguracoes')}>
+            <Image source={require('../assets/images/settingsicon.png')} />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.avatarSection}>
+        {/* Avatar + Estatísticas lado a lado */}
+        <View style={styles.profileRow}>
           <TouchableOpacity onPress={escolherFotoPerfil}>
             {perfilUri ? (
               <Image source={{ uri: perfilUri }} style={styles.avatar} />
             ) : (
               <View style={styles.avatarPlaceholder}>
-                <Ionicons name="add" size={36} color="#aaa" />
+                <Ionicons name="person-circle-outline" size={90} color="#ccc" />
               </View>
             )}
           </TouchableOpacity>
 
-          <View style={styles.detailsContainer}>
-            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Favoritos: </Text>{favoritos}</Text>
-            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Favoritado: </Text>{favoritado}</Text>
-            <Text style={styles.countText}><Text style={{ fontWeight: 'bold' }}>Posts: </Text>{posts}</Text>
-            <Text style={styles.countText}>
-              <Text style={{ fontWeight: 'bold' }}>Posição: </Text>{posicaoSelecionada || 'Nenhuma'}
-            </Text>
-            <TouchableOpacity style={styles.posicaoButton} onPress={() => setMostraSelecao(true)}>
-              <Text style={styles.posicaoButtonText}>Selecionar posição</Text>
-            </TouchableOpacity>
+          <View style={styles.statsRow}>
+            <View style={styles.statBox}>
+              <Text style={styles.statNumber}>{posts}</Text>
+              <Text style={styles.statLabel}>Posts</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statNumber}>{favoritos}</Text>
+              <Text style={styles.statLabel}>Favoritos</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.statNumber}>{favoritado}</Text>
+              <Text style={styles.statLabel}>Favoritado</Text>
+            </View>
           </View>
         </View>
 
-        {mostraSelecao && (
-          <View style={styles.selecaoContainer}>
-            {posicoes.map((posicao, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.radioItem}
-                onPress={() => setPosicaoTemp(posicao)}
-              >
-                <View style={styles.radioCircle}>
-                  {posicaoTemp === posicao && <View style={styles.radioInner} />}
-                </View>
-                <Text style={styles.radioLabel}>{posicao}</Text>
-              </TouchableOpacity>
-            ))}
+        {/* Botões */}
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.actionButton} onPress={alternarFavorito}>
+            <Text style={styles.buttonText}>
+              {favoritadoPorMim ? 'Desfavoritar' : 'Favoritar'}
+            </Text>
+          </TouchableOpacity>
 
-            <View style={styles.selecaoButtons}>
-              <TouchableOpacity style={styles.confirmar} onPress={confirmarPosicao}>
-                <Text style={styles.buttonText}>Confirmar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.cancelar} onPress={cancelarSelecao}>
-                <Text style={styles.buttonText}>Cancelar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+          <TouchableOpacity
+            style={[styles.actionButton, styles.curriculoButton]}
+            onPress={() => router.push('/Curriculo')}
+          >
+            <Text style={styles.buttonText}>Ver Currículo</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={styles.favoriteButton} onPress={alternarFavorito}>
-          <Text style={styles.favoriteText}>
-            {favoritadoPorMim ? 'Desfavoritar' : 'Favoritar'}
-          </Text>
-        </TouchableOpacity>
-
+        {/* Bio */}
         <View style={styles.bioContainer}>
           <Text style={styles.sectionTitle}>Currículo Esportivo</Text>
+
           {editandoBio ? (
             <>
               <TextInput
                 style={styles.bioInput}
                 multiline
                 placeholder="Fale sobre sua trajetória..."
-                value={curriculo}
-                onChangeText={setCurriculo}
+                value={bio}
+                onChangeText={setBio}
               />
-              <TouchableOpacity style={styles.saveButton} onPress={salvarCurriculo}>
-                <Text style={styles.saveText}>Salvar Currículo</Text>
+              <TouchableOpacity style={styles.saveButton} onPress={salvarBio}>
+                <Text style={styles.saveText}>Salvar</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
-              <Text style={styles.bioSavedText}>{curriculo}</Text>
-              <TouchableOpacity onPress={() => setEditandoCurriculo(true)}>
-                <Text style={styles.editLink}>Editar Currículo</Text>
+              <Text style={styles.bioSavedText}>{bio || 'Nenhum currículo preenchido.'}</Text>
+              <TouchableOpacity onPress={() => setEditandoBio(true)}>
+                <Text style={styles.editLink}>Editar</Text>
               </TouchableOpacity>
             </>
           )}
         </View>
-
-        <View style={styles.separator} />
       </ScrollView>
-    <Footer/> 
+
+      <Footer />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
+
   header: {
-    padding: 16,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    backgroundColor: '#fff',
     alignItems: 'center',
-    borderBottomWidth: 0.5,
-    borderColor: '#ccc',
+    justifyContent: 'center',
+    position: 'relative',
   },
   usernameHeader: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#000',
   },
-  avatarSection: {
+  iconright: {
+    position: 'absolute',
+    right: 16,
+    top: 20,
+    width: 24,
+    height: 24,
+  },
+
+  profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 16,
+    paddingHorizontal: 16,
+    marginTop: 20,
   },
   avatar: {
     width: 90,
@@ -207,101 +184,56 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  detailsContainer: {
-    marginLeft: 20,
-    justifyContent: 'space-between',
-    height: 100,
-  },
-  countText: {
-    fontSize: 14,
-    marginTop: 3,
-  },
-  posicaoButton: {
-    backgroundColor: '#3DB342',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginLeft: 3,
-    marginTop: 15,
-  },
-  posicaoButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  selecaoContainer: {
-    marginHorizontal: 16,
-    marginVertical: 12,
-    backgroundColor: '#f9f9f9',
-    padding: 12,
-    borderRadius: 8,
-  },
-  radioItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  radioCircle: {
-    height: 20,
-    width: 20,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#007bff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-  radioInner: {
-    height: 10,
-    width: 10,
-    borderRadius: 6,
-    backgroundColor: '#007bff',
-  },
-  radioLabel: {
-    fontSize: 14,
-  },
-  selecaoButtons: {
+  statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 12,
+    flex: 1,
+    marginLeft: 20,
   },
-  confirmar: {
-    backgroundColor: '#0a7d26',
-    padding: 8,
-    borderRadius: 6,
+  statBox: {
+    alignItems: 'center',
   },
-  cancelar: {
-    backgroundColor: '#cc0000',
-    padding: 8,
+  statNumber: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#000',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#555',
+  },
+
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 12,
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  actionButton: {
+    backgroundColor: '#3DB342',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 6,
+    alignItems: 'center',
+  },
+  curriculoButton: {
+    backgroundColor: '#111',
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-  favoriteButton: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    backgroundColor: '#3DB342',
-    paddingVertical: 6,
-    paddingHorizontal: 20,
-    borderRadius: 6,
-    marginBottom: 20,
-    marginTop: 30,
-  },
-  favoriteText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
+
   bioContainer: {
     paddingHorizontal: 16,
-    marginBottom: 20,
+    marginBottom: 30,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 8,
+    color: '#000',
   },
   bioInput: {
     borderWidth: 1,
@@ -310,6 +242,7 @@ const styles = StyleSheet.create({
     padding: 10,
     minHeight: 100,
     textAlignVertical: 'top',
+    backgroundColor: '#f9f9f9',
   },
   saveButton: {
     backgroundColor: '#0a7d26',
@@ -318,33 +251,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  saveText: { color: 'white', fontWeight: 'bold' },
+  saveText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   bioSavedText: {
     fontSize: 14,
     lineHeight: 20,
     backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 8,
+    color: '#333',
   },
   editLink: {
     color: '#0a7d26',
     fontWeight: 'bold',
     marginTop: 6,
+    textAlign: 'right',
   },
-  separator: {
-    height: 3,
-    backgroundColor: '#ccc',
-    marginVertical: 20,
-    marginHorizontal: 16,
-  },
-  iconright: {
-    position: 'absolute',
-    right: 15,
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-    top: 23
-  },
-
-
 });
+
