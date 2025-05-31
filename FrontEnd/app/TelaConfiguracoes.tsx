@@ -10,7 +10,7 @@ export default function TelaConfiguracoes(){
             <View style={styles.header}>
                 <View style={styles.linhaheader}>
                     <TouchableOpacity style={styles.iconleft}
-                    onPress={()=>router.push('/TelaInicial')}>
+                    onPress={()=>router.push('/TelaPerfil')}>
                         <Image
                         source={require('../assets/images/setavoltar.png')}
                         style={styles.iconleft}
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     texttitulo:{
         fontWeight: 900,
-        fontSize: 20
+        fontSize: 35
     },
     config1:{
         width: "90%",
@@ -79,11 +79,11 @@ const styles = StyleSheet.create({
     },
     iconleft: {
         position: 'absolute',
-        left: 16,
-        top: '50%',
+        left: 10,
+        top: 22,
         transform: [{ translateY: -12 }],
-        width: 25,
-        height: 25,
+        width: 40,
+        height: 40,
         resizeMode: 'contain',
     }
 })

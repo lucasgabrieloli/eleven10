@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   View,
@@ -20,6 +21,8 @@ export default function Curriculo() {
   const [timesVarzea, setTimesVarzea] = useState('');
   const [habilidades, setHabilidades] = useState('');
   const [camisa, setCamisa] = useState('');
+
+  const router = useRouter();
 
   const categorias = ['Sub-15', 'Sub-17', 'Sub-20', 'Adulto'];
   const posicoesPossiveis = [
@@ -44,7 +47,12 @@ export default function Curriculo() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-        
+        <View style={styles.headerz}>
+        <TouchableOpacity style={styles.iconleft} onPress={() => router.push('/TelaPerfil')}>
+          <Image source={require('../assets/images/setavoltar.png')}
+                  style={styles.iconleft}
+          />
+        </TouchableOpacity>
         {/* Logo Eleven 10 */}
         <Image
           source={require('../assets/images/logoheader.png')}
@@ -53,7 +61,8 @@ export default function Curriculo() {
         />
 
         <Text style={styles.header}>CURRÍCULO DO ATLETA</Text>
-
+        <Text style={styles.aviso}>Digite algumas informações sobre a sua carreira nos devidos espaços para ter ainda mais chances de ser contratado por um time de elite! Currículos com palavras inadequadas ou qualquer tipo de discurso de ódio serão permanentemente banidos.</Text>
+        </View>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Idade</Text>
           <TextInput
@@ -189,6 +198,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#3DB342',
     paddingTop: 50,
   },
+  aviso:{
+    color: "gray",
+    alignSelf:"center",
+    marginHorizontal: 30,
+    marginBottom: 10,
+    fontWeight: 700,
+    textAlign:"center"
+  },
+  headerz:{
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "darkgreen"
+  },
   scrollContainer: {
     paddingHorizontal: 20,
     paddingBottom: 40,
@@ -197,13 +221,12 @@ const styles = StyleSheet.create({
     width: 180,
     height: 80,
     alignSelf: 'center',
-    marginBottom: 10,
   },
   header: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 30,
+    color: 'black',
+    marginBottom: 20,
     textAlign: 'center',
   },
   inputGroup: {
@@ -268,4 +291,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
+  iconleft: {
+    position: 'absolute',
+    left: 10,
+    top: 21,
+    transform: [{ translateY: -12 }],
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    }
 });

@@ -7,7 +7,8 @@ import TelaPerfil from "./TelaPerfil";
 import TelaEventos from "./TelaEventos";
 import TelaPesquisa from "./TelaPesquisa";
 import VerificacaoOlheiro from "./verificacaoOlheiro";
+import Curriculo from "./Curriculo";
 
 export default function(){
-  return <VerificacaoOlheiro/>
+  return <Curriculo/>
 }

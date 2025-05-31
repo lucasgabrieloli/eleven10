@@ -70,13 +70,15 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     marginTop: -30
   },
-  iconleft: {
-    position: "absolute",
-    left: 16,
-    width: 25,
-    height: 25,
-    resizeMode: "contain",
-  },
+   iconleft: {
+    position: 'absolute',
+    left: 10,
+    top: 22,
+    transform: [{ translateY: -12 }],
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    },
   lista: {
     marginTop: 10,
     paddingHorizontal: 20,
