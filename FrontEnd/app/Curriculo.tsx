@@ -1,26 +1,21 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Image,
+import {View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, Image,
 } from 'react-native';
 
 export default function Curriculo() {
+  const [nome, setNome] = useState('');
   const [idade, setIdade] = useState('');
   const [categoria, setCategoria] = useState('');
   const [posicoes, setPosicoes] = useState<string[]>([]);
+  const [jogos, setJogos] = useState('');
   const [gols, setGols] = useState('');
   const [assistencias, setAssistencias] = useState('');
   const [conquistas, setConquistas] = useState('');
-  const [timesVarzea, setTimesVarzea] = useState('');
+  const [times, setTimes] = useState('');
   const [habilidades, setHabilidades] = useState('');
   const [camisa, setCamisa] = useState('');
+  const [editando, setEditando] = useState(true); 
 
   const router = useRouter();
 
@@ -31,6 +26,7 @@ export default function Curriculo() {
   ];
 
   const togglePosicao = (posicao: string) => {
+    if (!editando) return;
     if (posicoes.includes(posicao)) {
       setPosicoes(posicoes.filter(p => p !== posicao));
     } else if (posicoes.length < 2) {
@@ -41,13 +37,25 @@ export default function Curriculo() {
   };
 
   const salvarCurriculo = () => {
+    
+    if (!nome.trim() || !idade.trim() || !categoria || posicoes.length === 0) {
+      Alert.alert('Campos obrigatórios', 'Preencha Nome, Idade, Categoria e pelo menos 1 Posição.');
+      return;
+    }
+
+    setEditando(false); 
     Alert.alert('Sucesso', 'Currículo salvo com sucesso!');
+  };
+
+  const editarCurriculo = () => {
+    setEditando(true);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-        <View style={styles.headerz}>
+        
+ <View style={styles.headerz}>
         <TouchableOpacity style={styles.iconleft} onPress={() => router.push('/TelaPerfil')}>
           <Image source={require('../assets/images/setavoltar.png')}
                   style={styles.iconleft}
@@ -63,6 +71,19 @@ export default function Curriculo() {
         <Text style={styles.header}>CURRÍCULO DO ATLETA</Text>
         <Text style={styles.aviso}>Digite algumas informações sobre a sua carreira nos devidos espaços para ter ainda mais chances de ser contratado por um time de elite! Currículos com palavras inadequadas ou qualquer tipo de discurso de ódio serão permanentemente banidos.</Text>
         </View>
+        
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Nome Completo</Text>
+          <TextInput
+            style={styles.input}
+            value={nome}
+            onChangeText={setNome}
+            placeholder="Digite seu nome completo"
+            placeholderTextColor="#6a996b"
+            editable={editando}
+          />
+        </View>
+
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Idade</Text>
           <TextInput
@@ -72,6 +93,7 @@ export default function Curriculo() {
             onChangeText={setIdade}
             placeholder="Digite sua idade"
             placeholderTextColor="#6a996b"
+            editable={editando}
           />
         </View>
 
@@ -82,7 +104,7 @@ export default function Curriculo() {
               <TouchableOpacity
                 key={cat}
                 style={[styles.optionButton, categoria === cat && styles.optionButtonSelected]}
-                onPress={() => setCategoria(cat)}
+                onPress={() => editando && setCategoria(cat)}
               >
                 <Text style={[styles.optionText, categoria === cat && styles.optionTextSelected]}>
                   {cat}
@@ -112,6 +134,20 @@ export default function Curriculo() {
           </View>
         </View>
 
+        
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Jogos (temporada atual)</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            value={jogos}
+            onChangeText={setJogos}
+            placeholder="Número de jogos"
+            placeholderTextColor="#6a996b"
+            editable={editando}
+          />
+        </View>
+
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Gols (temporada atual)</Text>
           <TextInput
@@ -121,6 +157,7 @@ export default function Curriculo() {
             onChangeText={setGols}
             placeholder="Número de gols"
             placeholderTextColor="#6a996b"
+            editable={editando}
           />
         </View>
 
@@ -133,6 +170,7 @@ export default function Curriculo() {
             onChangeText={setAssistencias}
             placeholder="Número de assistências"
             placeholderTextColor="#6a996b"
+            editable={editando}
           />
         </View>
 
@@ -145,18 +183,20 @@ export default function Curriculo() {
             placeholder="Descreva suas conquistas"
             placeholderTextColor="#6a996b"
             multiline
+            editable={editando}
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Times de várzea que já jogou</Text>
+          <Text style={styles.label}>Times de várzea/base que já jogou</Text>
           <TextInput
             style={[styles.input, styles.multiline]}
-            value={timesVarzea}
-            onChangeText={setTimesVarzea}
+            value={times}
+            onChangeText={setTimes}
             placeholder="Liste os times"
             placeholderTextColor="#6a996b"
             multiline
+            editable={editando}
           />
         </View>
 
@@ -169,6 +209,7 @@ export default function Curriculo() {
             placeholder="Descreva suas habilidades"
             placeholderTextColor="#6a996b"
             multiline
+            editable={editando}
           />
         </View>
 
@@ -181,16 +222,25 @@ export default function Curriculo() {
             placeholder="Número da camisa"
             placeholderTextColor="#6a996b"
             keyboardType="numeric"
+            editable={editando}
           />
         </View>
 
-        <TouchableOpacity style={styles.saveButton} onPress={salvarCurriculo}>
-          <Text style={styles.saveButtonText}>Salvar Currículo</Text>
-        </TouchableOpacity>
+        
+        {editando ? (
+          <TouchableOpacity style={styles.saveButton} onPress={salvarCurriculo}>
+            <Text style={styles.saveButtonText}>Salvar Currículo</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={[styles.saveButton, { backgroundColor: '#2e8b57' }]} onPress={editarCurriculo}>
+            <Text style={styles.saveButtonText}>Editar Currículo</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -225,7 +275,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'darkgreen',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -234,7 +284,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '700',
     marginBottom: 8,
     fontSize: 16,
   },

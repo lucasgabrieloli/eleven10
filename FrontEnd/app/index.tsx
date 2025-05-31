@@ -10,5 +10,5 @@ import VerificacaoOlheiro from "./verificacaoOlheiro";
 import Curriculo from "./Curriculo";
 
 export default function(){
-  return <Curriculo/>
+  return <TelaInicial/>
 }

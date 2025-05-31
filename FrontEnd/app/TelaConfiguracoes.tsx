@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     },
     texttitulo:{
         fontWeight: 900,
-        fontSize: 35
+        fontSize: 35,
+        color: "darkgreen"
     },
     config1:{
         width: "90%",

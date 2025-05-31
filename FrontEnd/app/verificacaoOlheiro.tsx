@@ -16,6 +16,9 @@ export default function VerificacaoOlheiro(){
                     <TouchableOpacity style={styles.botaoz}> {/*ADICIONAR PAGINA DE CADASTRO DE OLHEIRO*/}
                             <Text style={styles.textbotao}>Olheiro</Text>
                     </TouchableOpacity>
+                    <View style={styles.espacoou}>
+                            <Text style={styles.textou}>OU</Text>
+                    </View>
                     <TouchableOpacity style={styles.botaoz} onPress={() => router.push('/TelaCadastro')}>
                             <Text style={styles.textbotao}>Atleta</Text>
                     </TouchableOpacity>
@@ -51,7 +54,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: "Black",
         fontWeight: "900",
-        textAlign: "center"
+        textAlign: "center",
+        marginBottom: 10
     },
     divbotaos:{
         width: 250,
@@ -65,7 +69,6 @@ const styles = StyleSheet.create({
         width: 250,
         height: 70,
         backgroundColor: "#3db342",
-        marginVertical: 25,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "gray",
@@ -77,4 +80,15 @@ const styles = StyleSheet.create({
         fontWeight: 700,
         color: "#f1f1f1",
     },
+    espacoou:{
+        width: 250,
+        height: 70,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    textou:{
+        fontSize: 15,
+        fontWeight: 700,
+        color: "darkgreen"
+    }
 })

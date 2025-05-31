@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList } 
 import { useState } from "react";
 import { usePost } from "@/PostContext";
 import Footer from "@/components/Footer";
+import { useRouter } from "expo-router";
 
 export default function TelaPesquisa() {
   const [pesquisa, setPesquisa] = useState("");
@@ -11,10 +12,12 @@ export default function TelaPesquisa() {
     post.legenda.toLowerCase().includes(pesquisa.toLowerCase())
   );
 
+  const router = useRouter()
+
   return (
     <View style={styles.root}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.iconleft}>
+        <TouchableOpacity style={styles.iconleft} onPress={()=> router.push('/TelaInicial')}>
           <Image
             source={require('../assets/images/setavoltar.png')}
             style={styles.iconleft}
@@ -103,3 +106,4 @@ const styles = StyleSheet.create({
     color: "gray",
   },
 });
+
