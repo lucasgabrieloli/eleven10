@@ -6,6 +6,8 @@ import {View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, 
 export default function Curriculo() {
   const [nome, setNome] = useState('');
   const [idade, setIdade] = useState('');
+  const [altura, setAltura] = useState('');
+  const [peso, setPeso] = useState('');
   const [categoria, setCategoria] = useState('');
   const [posicoes, setPosicoes] = useState<string[]>([]);
   const [jogos, setJogos] = useState('');
@@ -94,6 +96,33 @@ export default function Curriculo() {
             placeholder="Digite sua idade"
             placeholderTextColor="#6a996b"
             editable={editando}
+          />
+        </View>
+
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Altura (em cm)</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            value={altura}
+            onChangeText={setAltura}
+            placeholder="Digite sua altura"
+            placeholderTextColor="#6a996b"
+            editable={editando}
+          />
+          </View>
+
+          <View style={styles.inputGroup}>
+          <Text style={styles.label}>Peso (em kg)</Text>  
+          <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            value={peso}
+            onChangeText={setPeso}
+            placeholder="Digite seu peso"
+            placeholderTextColor="#6a996b"
+            editable={editando}
+
           />
         </View>
 
