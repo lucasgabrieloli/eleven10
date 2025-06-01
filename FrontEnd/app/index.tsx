@@ -8,7 +8,8 @@ import TelaEventos from "./TelaEventos";
 import TelaPesquisa from "./TelaPesquisa";
 import VerificacaoOlheiro from "./verificacaoOlheiro";
 import Curriculo from "./Curriculo";
+import TelaCadastroOlheiro from "./TelaCadastroOlheiro";
 
 export default function(){
-  return <TelaInicial/>
+  return <TelaCadastroOlheiro/>
 }

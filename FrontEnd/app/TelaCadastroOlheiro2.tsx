@@ -24,7 +24,7 @@ class user {
 }
 
 
-export default function TelaCadastro2() {
+export default function TelaCadastroOlheiro2() {
 
     const router = useRouter()
     const { name, email, phone, data } = useLocalSearchParams();
@@ -79,7 +79,7 @@ export default function TelaCadastro2() {
                 </View>
             </View>
             <View style={styles.boxcad}>
-                <Text style={styles.textaviso}>Apenas maiores de 14 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu Nome Completo ou Telefone no seu Perfil Atleta.</Text>
+                <Text style={styles.textaviso}>Assim que você criar sua conta seu cadastro será encaminhado para análise. Em até dois dias, ele será revisado e você poderá acessar todas as funcionalidades do aplicativo normalmente.</Text>
                 <TextInput
                     style={styles.input}
                     placeholder='Escolha seu Nome de Usuário:'
@@ -98,7 +98,7 @@ export default function TelaCadastro2() {
                 />
 
                 <View style={styles.divbotoes}>
-                    <TouchableOpacity style={GlobalStyles.botaologin} onPress={() => router.push('/TelaCadastro')}><Text style={GlobalStyles.txtbut}>Voltar</Text></TouchableOpacity>
+                    <TouchableOpacity style={GlobalStyles.botaologin} onPress={() => router.push('/TelaCadastroOlheiro')}><Text style={GlobalStyles.txtbut}>Voltar</Text></TouchableOpacity>
                     <TouchableOpacity onPress={() => registerUser()} style={GlobalStyles.botaologin}><Text style={GlobalStyles.txtbut}>Continuar</Text></TouchableOpacity>
                 </View>
             </View>
