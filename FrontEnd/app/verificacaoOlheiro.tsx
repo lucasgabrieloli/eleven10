@@ -13,7 +13,7 @@ export default function VerificacaoOlheiro(){
                     <Text style={styles.textotit}>Você é Olheiro ou Atleta?</Text>
 
                 <View style={styles.divbotaos}>
-                    <TouchableOpacity style={styles.botaoz}> {/*ADICIONAR PAGINA DE CADASTRO DE OLHEIRO*/}
+                    <TouchableOpacity style={styles.botaoz} onPress={() => router.push('/TelaCadastroOlheiro')}> 
                             <Text style={styles.textbotao}>Olheiro</Text>
                     </TouchableOpacity>
                     <View style={styles.espacoou}>

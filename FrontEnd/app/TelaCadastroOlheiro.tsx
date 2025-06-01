@@ -3,72 +3,53 @@ import { GlobalStyles } from '../styles/GlobalStyles'
 import { useRouter, router } from 'expo-router'
 import { useState } from 'react'
 import { API_url } from '@/APP_CONFIG';
+import {cpf} from 'cpf-cnpj-validator'
 
 
-export default function TelaCadastros() {
+export default function TelaCadastroOlheiro() {
     const router = useRouter();
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [telefone, setTelefone] = useState('')
     const [dataNascimento, setDataNascimento] = useState('')
+    const [CPF, setCPF] = useState('')
 
 
-    const isOver14 = (dateStr: string) => {
+    const isOver18 = (dateStr: string) => {
         const [day, month, year] = dateStr.split('/').map(Number);
         const birthDate = new Date(year, month - 1, day);
         const today = new Date();
         const age = today.getFullYear() - birthDate.getFullYear();
         const m = today.getMonth() - birthDate.getMonth();
-        return age > 14 || (age === 14 && m >= 0);
+        return age > 18 || (age === 18 && m >= 0);
     };
 
     const validarCampos = () => {
-        if (!nome || !email || !telefone || !dataNascimento) {
-            Alert.alert("Preencha todos os dados para continuar!")
-            router.push('/TelaCadastro')
+        if (!nome || !email || !telefone || !dataNascimento || !CPF) {
+            Alert.alert("Preencha todos os dados para continuar!");
+            return false;
         }
 
-        else if (!isOver14) {
-            Alert.alert("Você deve ser maior que 14 anos para continuar!")
-            router.push('/TelaCadastro')
+        if (!isOver18(dataNascimento)) {
+            Alert.alert("Você deve ser maior que 18 anos para continuar!");
+            return false;
         }
-        else {
-            registerUser()
-            // router.push('/TelaCadastro2')j
+
+        if (!cpf.isValid(CPF)) {
+            Alert.alert("CPF inválido! Verifique e tente novamente.");
+            return false;
+        }
+
+        return true;
+        };
+
+
+    const validarContinuar = ()=>{
+        if(validarCampos()){
+            router.push('/TelaCadastroOlheiro2')
         }
     }
 
-
-    const registerUser = async () => {
-
-        // const response = await fetch(API_url,
-        //     {
-        //         method: "POST",
-        //         body: JSON.stringify({
-        //             username: "",
-        //             senha: "",
-        //             email: email,
-        //             telefone: telefone,
-        //             nomeCompleto: nome,
-        //             dataDeAniversario: dataNascimento,
-        //             logradouro: "",
-        //             profilePicture: ""
-        //         })
-        //     }
-        // )
-
-
-        router.push({
-            pathname: '/TelaCadastro2',
-            params: {
-                name: nome,
-                email: email,
-                phone: telefone,
-                data: dataNascimento
-            }
-        })
-
-    }
         return (
             <View style={styles.container}>
 
@@ -80,7 +61,7 @@ export default function TelaCadastros() {
                     </View>
                 </View>
                 <View style={styles.boxcad}>
-                    <Text style={styles.textaviso}>Apenas maiores de 14 anos poderão se cadastrar no ELEVEN 10. Nós não exibiremos seu Nome Completo ou Telefone no seu Perfil Atleta.</Text>
+                    <Text style={styles.textaviso}>Assim que você criar sua conta seu cadastro será encaminhado para análise. Em até dois dias, ele será revisado e você poderá acessar todas as funcionalidades do aplicativo normalmente.</Text>
 
                     <TextInput
                         style={styles.input}
@@ -115,11 +96,20 @@ export default function TelaCadastros() {
                         keyboardType="number-pad"
                     />
 
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Digite seu CPF"
+                        placeholderTextColor="#666"
+                        value={CPF}
+                        onChangeText={setCPF}
+                        keyboardType="numeric"
+                    />
+
                     <View style={styles.divbotoes}>
                         <TouchableOpacity style={GlobalStyles.botaologin} onPress={()=> router.push('/verificacaoOlheiro')}>
                             <Text style={GlobalStyles.txtbut}>Voltar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={GlobalStyles.botaologin} onPress={() => {validarCampos(), registerUser(), ()=> router.push('/TelaCadastro2')}}>
+                        <TouchableOpacity style={GlobalStyles.botaologin} onPress={validarContinuar}>
                             <Text style={GlobalStyles.txtbut}>Continuar</Text>
                         </TouchableOpacity>
                     </View>
@@ -151,7 +141,7 @@ const styles = StyleSheet.create({
     boxcad: {
         backgroundColor: "white",
         width: '76%',
-        height: 480,
+        height: 580,
         borderColor: 'gray',
         borderWidth: 0.6,
         borderRadius: 10,

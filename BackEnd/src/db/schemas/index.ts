@@ -16,7 +16,6 @@ const bytea = customType<{ data: Buffer; notNull: true }>({
 export const generoEnum = pgEnum('genero', ['Masculino', 'Feminino']);
 
 
-
 export const atleta = pgTable('atleta', {
   idAtleta: text('id_atleta').primaryKey().$defaultFn(() => createId()),
   username: varchar('username', { length: 30 }).notNull().unique(),
