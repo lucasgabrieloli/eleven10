@@ -1,19 +1,20 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { publicacoes } from "../../db/schemas/index";
+import { posts } from "../../db/schemas/index";
 
 export const getPublicacaoBYId = async (id: string) => {
     const publicacao = await db
         .select({
-            idPublicacoes: publicacoes.idPublicacoes,
-            usuarioIdUsuario: publicacoes.usuarioIdUsuario,
-            conteudo: publicacoes.conteudo,
-            midiaUrl: publicacoes.midiaUrl,
-            curtidas: publicacoes.curtidas,
+            idPosts: posts.idPosts,
+            idAtleta: posts.idAtleta,
+            midiaUrl: posts.midiaUrl,
+            legenda: posts.legenda,
+            criadoEm: posts.criadoEm,
+            
 
         })
-        .from(publicacoes)
-        .where(eq(publicacoes.idPublicacoes, id));
+        .from(posts)
+        .where(eq(posts.idPosts, id));
 
-    return publicacao;
+    return posts;
 };

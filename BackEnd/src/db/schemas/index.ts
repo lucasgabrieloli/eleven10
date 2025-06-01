@@ -58,8 +58,7 @@ export const eventos = pgTable('eventos', {
 export const posts = pgTable('posts', {
   idPosts: text('id_posts').primaryKey().$defaultFn(() => createId()),
   idAtleta: text('id_atleta').notNull().references(() => atleta.idAtleta),
-  idOlheiro: text('id_olheiro').notNull().references(() => olheiro.idOlheiro),
-  midia: bytea ('midia') .notNull(),
+  midiaUrl: bytea ('midia') .notNull(),
   legenda: text('legenda').notNull(),
   criadoEm: timestamp('criado_em').notNull().defaultNow(),
 });
