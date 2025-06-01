@@ -7,7 +7,18 @@ export default function Footer() {
     const router = useRouter()
     const pathname = usePathname()
 
+    async function requestPermission() {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Precisamos da sua permissão para acessar a galeria!');
+      return false;
+    }
+    return true;
+  }
+
     async function pickMedia() {
+            const temPermissao = await requestPermission();
+        if (!temPermissao) return; 
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
@@ -22,13 +33,15 @@ export default function Footer() {
                 type = 'video';
             }
 
-            router.push({
+           router.push({
                 pathname: '/CriarPosts',
                 params: {
-                    uri,
-                    type,
+                uri: encodeURIComponent(uri),
+                type,
                 },
-            });
+});
+
+           
         }
     }
 

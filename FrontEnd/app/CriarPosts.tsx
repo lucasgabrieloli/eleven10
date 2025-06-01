@@ -2,12 +2,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, TextInput, TouchableOpacity, Image, StyleSheet, Text } from "react-native";
 import { usePost } from "@/PostContext";
-import { Video } from 'expo-av'
+import { Video, ResizeMode } from 'expo-av'
 import { GlobalStyles } from "@/styles/GlobalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CriarPosts() {
-  const { uri, type } = useLocalSearchParams()
+  const { uri: encodedUri, type } = useLocalSearchParams();
+  const uri = decodeURIComponent(encodedUri as string);
   const [legenda, setLegenda] = useState('')
   const { addPost } = usePost()
   const router = useRouter()
@@ -23,37 +24,39 @@ export default function CriarPosts() {
 
   }, []);
   console.log("PORRA DA URI:", uri)
-  function publicar() {
-    console.log("Adicionando post:", { uri, type, legenda });
-    addPost({
-      id: Date.now().toString(),
-      uri: "https://as2.ftcdn.net/v2/jpg/03/64/94/15/1000_F_364941555_VZQwRF7j1Cfh9v9dVT6DlZCBj7FU7NsS.jpg",
-      type: type as 'image' | 'video',
-      legenda,
-      userName: username as string,
-      userProfilePicture: "https://placehold.co/40x40",
-      userId: "123",
-      likes: 0,
-    });
 
-    router.push('/TelaInicial');
-  }
+  function publicar() {
+  console.log("Adicionando post:", { uri, type, legenda });
+  addPost({
+    id: Date.now().toString(),
+    uri: uri as string,
+    type: type as 'image' | 'video',
+    legenda,
+    userName: username as string,
+    userProfilePicture: "https://placehold.co/40x40",
+    userId: "123",
+    likes: 0,
+  });
+
+  router.push('/TelaInicial');
+}
+
 
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
       <View style={styles.container}>
         {type === 'image' ? (
-          <Image source={{ uri: "https://as2.ftcdn.net/v2/jpg/03/64/94/15/1000_F_364941555_VZQwRF7j1Cfh9v9dVT6DlZCBj7FU7NsS.jpg" }} style={styles.preview} />
-        ) : (
-          <Video
-            source={{ uri: "https://as2.ftcdn.net/v2/jpg/03/64/94/15/1000_F_364941555_VZQwRF7j1Cfh9v9dVT6DlZCBj7FU7NsS.jpg" }}
-            style={styles.preview}
-            useNativeControls
-            resizeMode={"contain" as any}
-            shouldPlay
-          />
-        )}
+      <Image source={{ uri: uri as string }} style={styles.preview} />
+      ) : (
+      <Video
+        source={{ uri: uri as string }}
+        style={styles.preview}
+        useNativeControls
+        resizeMode={ResizeMode.CONTAIN}
+        shouldPlay
+      />
+)}
         <TextInput
           placeholder="Escreva uma legenda..."
           value={legenda}

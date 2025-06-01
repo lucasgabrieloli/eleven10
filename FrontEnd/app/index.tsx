@@ -9,7 +9,12 @@ import TelaPesquisa from "./TelaPesquisa";
 import VerificacaoOlheiro from "./verificacaoOlheiro";
 import Curriculo from "./Curriculo";
 import TelaCadastroOlheiro from "./TelaCadastroOlheiro";
+import { PostProvider } from "@/PostContext";
 
 export default function(){
-  return <TelaCadastroOlheiro/>
+  return(
+    <PostProvider>
+    <TelaInicial/>
+    </PostProvider>
+) 
 }

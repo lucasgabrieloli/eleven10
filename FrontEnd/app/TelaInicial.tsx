@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, Text } from 'react-native';
-import { PostProvider, usePost } from '@/PostContext';
+import { usePost } from '@/PostContext';
 import PostItem from '@/components/Posts';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -9,8 +9,6 @@ export default function TelaInicial() {
   const { posts } = usePost();
 
   return (
-    <PostProvider>
-
       <View style={styles.container}>
         <Header />
         <FlatList
@@ -24,10 +22,10 @@ export default function TelaInicial() {
             </View>
           }
         />
-
+      <Footer/> 
       </View>
-    <Footer/> 
-    </PostProvider>
+    
+
   );
 }
 
@@ -45,5 +43,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: 'gray',
+    marginTop: 300
   }
 });
