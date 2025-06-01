@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 type Evento = {
   id: string;
   nomeTime: string;
+  data: string;
   local: string;
   horario: string;
   categoria: string;
@@ -26,6 +27,7 @@ export default function TelaEventos() {
 
   const [nomeTime, setNomeTime] = useState('');
   const [local, setLocal] = useState('');
+  const [data, setData] = useState('');
   const [horario, setHorario] = useState('');
   const [categoria, setCategoria] = useState('');
   const [posicoes, setPosicoes] = useState('');
@@ -85,6 +87,7 @@ export default function TelaEventos() {
   const limparFormulario = () => {
     setNomeTime('');
     setLocal('');
+    setData('');
     setHorario('');
     setCategoria('');
     setPosicoes('');
@@ -106,6 +109,7 @@ export default function TelaEventos() {
         id: Date.now().toString(),
         nomeTime,
         local,
+        data,
         horario,
         categoria,
         posicoes,
@@ -121,6 +125,7 @@ export default function TelaEventos() {
   const editarEvento = (evento: Evento) => {
     setNomeTime(evento.nomeTime);
     setLocal(evento.local);
+    setData(evento.data);
     setHorario(evento.horario);
     setCategoria(evento.categoria);
     setPosicoes(evento.posicoes);
@@ -143,6 +148,7 @@ export default function TelaEventos() {
       <View style={styles.info}>
         <Text style={styles.tituloEvento}>{item.nomeTime}</Text>
         <Text style={styles.infoTexto}>📍 {item.local}</Text>
+        <Text style={styles.infoTexto}>📅 {item.data}</Text>
         <Text style={styles.infoTexto}>⏰ {item.horario}</Text>
         <Text style={styles.tag}>Categoria: {item.categoria}</Text>
         <Text style={styles.tag}>Posições: {item.posicoes}</Text>
@@ -186,11 +192,11 @@ export default function TelaEventos() {
             <TextInput placeholder="Nome do time" value={nomeTime} onChangeText={setNomeTime} style={styles.input} />
             <TextInput placeholder="Local" value={local} onChangeText={setLocal} style={styles.input} />
             <TextInput
-              placeholder="Horário (ex: 14:30)"
-              value={horario}
-              onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))}
-              style={styles.input}
-              keyboardType="numeric"
+              placeholder="Horário (ex: 14:30)" value={horario} onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))} style={styles.input}
+            />
+               <TextInput
+              placeholder="Data (ex: 01-01-2025)" value={horario} onChangeText={(text) => setData(text.replace(/[^0-9:]/g, ''))} style={styles.input}
+        
             />
             <TextInput placeholder="Categoria" value={categoria} onChangeText={setCategoria} style={styles.input} />
             <TextInput placeholder="Posições" value={posicoes} onChangeText={setPosicoes} style={styles.input} />
