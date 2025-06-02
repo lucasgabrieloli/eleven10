@@ -5,8 +5,8 @@
   "scripts": {
     "build": "tsup src",
     "start": "node dist/http/server.js",
-    "dev": "tsx watch --env-file .env src/http/server.ts",
-    "seed": "tsx --env-file .env src/db/seed.ts"
+    "dev": "dotenv -e .env -- tsx watch src/http/server.ts",
+    "seed": "dotenv -e .env -- tsx src/db/seed.ts"
   },
   "engines": {
     "node": "18"
@@ -17,7 +17,10 @@
   "description": "",
   "devDependencies": {
     "@biomejs/biome": "1.9.0",
+    "@types/cors": "^2.8.18",
     "@types/node": "^22.5.4",
+    "@types/pg": "^8.15.3",
+    "dotenv-cli": "^8.0.0",
     "drizzle-kit": "^0.24.2",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
@@ -26,7 +29,9 @@
     "@fastify/cors": "^10.0.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "axios": "^1.7.7",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.33.0",
     "fastify": "^5.0.0",
     "fastify-type-provider-zod": "^4.0.2",
