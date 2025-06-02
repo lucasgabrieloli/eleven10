@@ -17,7 +17,7 @@ export default function TelaPerfil() {
   const [favoritado, setFavoritado] = useState<number>(0);
   const [posts, setPosts] = useState<number>(0);
   const [favoritadoPorMim, setFavoritadoPorMim] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>('usuario_exemplo');
+  const [username, setUsername] = useState<string>('usuario');
 
   useEffect(() => {
     (async () => {
@@ -108,14 +108,14 @@ export default function TelaPerfil() {
 
         {/* Bio */}
         <View style={styles.bioContainer}>
-          <Text style={styles.sectionTitle}>Currículo Esportivo</Text>
+          <Text style={styles.sectionTitle}>Bio:</Text>
 
           {editandoBio ? (
             <>
               <TextInput
                 style={styles.bioInput}
                 multiline
-                placeholder="Fale sobre sua trajetória..."
+                placeholder="Digite sua biografia..."
                 value={bio}
                 onChangeText={setBio}
               />
@@ -216,9 +216,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 6,
     alignItems: 'center',
+    width: 150
   },
   curriculoButton: {
     backgroundColor: '#111',
+    width: 150
   },
   buttonText: {
     color: '#fff',
