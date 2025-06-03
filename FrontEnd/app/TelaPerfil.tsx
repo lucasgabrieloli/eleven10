@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TextInput, ScrollView, Image, TouchableOpacity, Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import Footer from '@/components/Footer';
 import { useRouter } from 'expo-router';
@@ -25,6 +26,16 @@ export default function TelaPerfil() {
       if (status !== 'granted') {
         Alert.alert('Permissão necessária', 'Permita acesso à galeria para continuar.');
       }
+
+     
+      const fotoSalva = await AsyncStorage.getItem('fotoPerfil');
+      if (fotoSalva) setPerfilUri(fotoSalva);
+
+      const bioSalva = await AsyncStorage.getItem('bioUsuario');
+      if (bioSalva) {
+        setBio(bioSalva);
+        setEditandoBio(false);
+      }
     })();
   }, []);
 
@@ -36,18 +47,22 @@ export default function TelaPerfil() {
     });
 
     if (!result.canceled && result.assets[0]) {
-      setPerfilUri(result.assets[0].uri);
+      const uri = result.assets[0].uri;
+      setPerfilUri(uri);
+      await AsyncStorage.setItem('fotoPerfil', uri);
+      Alert.alert('Foto atualizada', 'Sua foto de perfil foi salva com sucesso.');
     }
+  };
+
+  const salvarBio = async () => {
+    setEditandoBio(false);
+    await AsyncStorage.setItem('bioUsuario', bio);
+    Alert.alert('Sucesso', 'Currículo salvo com sucesso!');
   };
 
   const alternarFavorito = () => {
     setFavoritadoPorMim(!favoritadoPorMim);
     setFavoritado(prev => favoritadoPorMim ? prev - 1 : prev + 1);
-  };
-
-  const salvarBio = () => {
-    setEditandoBio(false);
-    Alert.alert('Sucesso', 'Currículo salvo com sucesso!');
   };
 
   return (
@@ -62,17 +77,22 @@ export default function TelaPerfil() {
           </TouchableOpacity>
         </View>
 
-        {/* Avatar + Estatísticas lado a lado */}
+        
         <View style={styles.profileRow}>
-          <TouchableOpacity onPress={escolherFotoPerfil}>
-            {perfilUri ? (
-              <Image source={{ uri: perfilUri }} style={styles.avatar} />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <Ionicons name="person-circle-outline" size={90} color="#ccc" />
+          <View style={styles.avatarContainer}>
+            <TouchableOpacity onPress={escolherFotoPerfil}>
+              {perfilUri ? (
+                <Image source={{ uri: perfilUri }} style={styles.avatar} />
+              ) : (
+                <View style={styles.avatarPlaceholder}>
+                  <Ionicons name="person-circle-outline" size={90} color="#ccc" />
+                </View>
+              )}
+              <View style={styles.cameraIcon}>
+                <Ionicons name="camera" size={20} color="#fff" />
               </View>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.statsRow}>
             <View style={styles.statBox}>
@@ -171,6 +191,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 20,
   },
+  avatarContainer: {
+    position: 'relative',
+    width: 90,
+    height: 90,
+  },
   avatar: {
     width: 90,
     height: 90,
@@ -183,6 +208,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cameraIcon: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: '#0008',
+    borderRadius: 12,
+    padding: 2,
   },
   statsRow: {
     flexDirection: 'row',
@@ -272,4 +305,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
