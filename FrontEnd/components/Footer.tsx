@@ -35,10 +35,7 @@ export default function Footer() {
 
            router.push({
                 pathname: '/CriarPosts',
-                params: {
-                uri: encodeURIComponent(uri),
-                type,
-                },
+                params: { uri, type },
 });
 
            
@@ -113,7 +110,9 @@ const styles = StyleSheet.create({
         borderTopColor: "lightgray",
         borderTopWidth: 2,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        position: "absolute",
+        bottom: 0
     },
     botoesfooter: {
         width: "92%",

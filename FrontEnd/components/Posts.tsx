@@ -1,10 +1,9 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableHighlight } from "react-native";
-import { useState } from "react";
-import { Video } from "expo-av";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useState, useRef, useEffect } from "react";
+import { Video, ResizeMode, type Video as VideoType } from "expo-av";
 import { Post } from "@/PostContext";
 import { useRouter } from "expo-router";
 
-  const router = useRouter()
 
 type PostItemProps = {
   item: Post;
@@ -13,6 +12,18 @@ type PostItemProps = {
 function PostItem({ item } : PostItemProps){
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
+  const router = useRouter();
+  const videoRef = useRef<VideoType>(null);
+
+  useEffect(() => {
+    if (item.type === 'video' && videoRef.current) {
+      videoRef.current.setStatusAsync({
+        shouldPlay: true,
+        isMuted: true,
+        isLooping: true
+      });
+    }
+  }, [item.uri]);
 
   function toggleLike() {
     if (liked) {
@@ -23,18 +34,15 @@ function PostItem({ item } : PostItemProps){
     setLiked(!liked);
   }
 
-  const resultadoLikes = item.likes + likesCount
+  const resultadoLikes = item.likes + likesCount;
 
   return(
     <View style={styles.post}>
       {/* Perfil */}
       <View style={styles.profileContainer}>
         <TouchableOpacity style={styles.botaoperfil} onPress={()=>router.push('/TelaPerfil2')}>
-        <Image
-          source={{ uri: item.userProfilePicture  }}
-          style={styles.profileImage}
-        />
-        <Text style={styles.profileName}>{item.userName || "Usuário"}</Text>
+          <Image source={{ uri: item.userProfilePicture }} style={styles.profileImage} />
+          <Text style={styles.profileName}>{item.userName || "Usuário"}</Text>
         </TouchableOpacity>
       </View>
 
@@ -43,9 +51,10 @@ function PostItem({ item } : PostItemProps){
         <Image source={{ uri: item.uri }} style={styles.media} />
       ) : (
         <Video
+          ref={videoRef}
           source={{ uri: item.uri }}
           style={styles.media}
-          useNativeControls
+          resizeMode={ResizeMode.CONTAIN}
         />
       )}
 
@@ -53,23 +62,26 @@ function PostItem({ item } : PostItemProps){
       <Text style={styles.caption}>{item.legenda}</Text>
 
       <View style={styles.likecoment}>
-      {/* Botão Like */}
-      <TouchableOpacity onPress={toggleLike} style={styles.likeButton}>
-        <Image source={liked ? 
-        require('../assets/images/likeimg_ativado.png') 
-        : require('../assets/images/likeimg.png') }
-        style={styles.likeimg}
-        />
-        <Text style={{color: liked ? "#3db342" : "gray", fontSize: 12}}>{resultadoLikes}</Text>
-      </TouchableOpacity>
-      <View style={styles.linha}></View>
-      {/*Botão Comentário*/}
-      <TouchableOpacity style={styles.likeButton}>
-        <Image
-          source={require('../assets/images/comentimg.png')}
-          style={styles.likeimg}
-        />
-      </TouchableOpacity>
+        {/* Botão Like */}
+        <TouchableOpacity onPress={toggleLike} style={styles.likeButton}>
+          <Image
+            source={liked
+              ? require('../assets/images/likeimg_ativado.png')
+              : require('../assets/images/likeimg.png')}
+            style={styles.likeimg}
+          />
+          <Text style={{ color: liked ? "#3db342" : "gray", fontSize: 12 }}>{resultadoLikes}</Text>
+        </TouchableOpacity>
+
+        <View style={styles.linha}></View>
+
+        {/* Botão Comentário */}
+        <TouchableOpacity style={styles.likeButton}>
+          <Image
+            source={require('../assets/images/comentimg.png')}
+            style={styles.likeimg}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -105,10 +117,10 @@ const styles = StyleSheet.create({
   },
   media: {
     width: "100%",
-    resizeMode: "cover",
     height: 200,
     marginBottom: 8,
     borderRadius: 10,
+    backgroundColor: '#000'
   },
   caption: {
     marginBottom: 8,
