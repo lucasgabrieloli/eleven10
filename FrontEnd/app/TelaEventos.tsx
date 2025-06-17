@@ -6,8 +6,9 @@ import {
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
+import { TextInputMask } from 'react-native-masked-text';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '@/components/Footer';
-import { useNavigation } from '@react-navigation/native';
 
 type Evento = {
   id: string;
@@ -38,6 +39,17 @@ export default function TelaEventos() {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
+
+  // Carrega eventos do AsyncStorage ao iniciar
+  useEffect(() => {
+    const carregarEventos = async () => {
+      const dados = await AsyncStorage.getItem('eventos');
+      if (dados) {
+        setEventos(JSON.parse(dados));
+      }
+    };
+    carregarEventos();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -95,14 +107,18 @@ export default function TelaEventos() {
     setEventoEmEdicao(null);
   };
 
-  const salvarEvento = () => {
+  const salvarEventosNoStorage = async (eventosParaSalvar: Evento[]) => {
+    await AsyncStorage.setItem('eventos', JSON.stringify(eventosParaSalvar));
+  };
+
+  const salvarEvento = async () => {
+    let novosEventos: Evento[];
+
     if (eventoEmEdicao) {
-      setEventos((prev) =>
-        prev.map((e) =>
-          e.id === eventoEmEdicao
-            ? { ...e, nomeTime, local, horario, categoria, posicoes, imagem }
-            : e
-        )
+      novosEventos = eventos.map((e) =>
+        e.id === eventoEmEdicao
+          ? { ...e, nomeTime, local, horario, data, categoria, posicoes, imagem }
+          : e
       );
     } else {
       const novoEvento: Evento = {
@@ -115,9 +131,11 @@ export default function TelaEventos() {
         posicoes,
         imagem,
       };
-      setEventos([...eventos, novoEvento]);
+      novosEventos = [...eventos, novoEvento];
     }
 
+    setEventos(novosEventos);
+    await salvarEventosNoStorage(novosEventos);
     limparFormulario();
     setCriando(false);
   };
@@ -134,8 +152,10 @@ export default function TelaEventos() {
     setCriando(true);
   };
 
-  const excluirEvento = (id: string) => {
-    setEventos((prev) => prev.filter((e) => e.id !== id));
+  const excluirEvento = async (id: string) => {
+    const novosEventos = eventos.filter((e) => e.id !== id);
+    setEventos(novosEventos);
+    await salvarEventosNoStorage(novosEventos);
     if (eventoEmEdicao === id) {
       limparFormulario();
       setCriando(false);
@@ -192,11 +212,18 @@ export default function TelaEventos() {
             <TextInput placeholder="Nome do time" value={nomeTime} onChangeText={setNomeTime} style={styles.input} />
             <TextInput placeholder="Local" value={local} onChangeText={setLocal} style={styles.input} />
             <TextInput
-              placeholder="Horário (ex: 14:30)" value={horario} onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))} style={styles.input}
+              placeholder="Horário (ex: 14:30)"
+              value={horario}
+              onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))}
+              style={styles.input}
             />
-               <TextInput
-              placeholder="Data (ex: 01-01-2025)" value={horario} onChangeText={(text) => setData(text.replace(/[^0-9:]/g, ''))} style={styles.input}
-        
+            <TextInputMask
+              type={'datetime'}
+              options={{ format: 'DD-MM-YYYY' }}
+              placeholder="Data (ex: 01-01-2025)"
+              value={data}
+              onChangeText={setData}
+              style={[styles.input, styles.inputMask]}
             />
             <TextInput placeholder="Categoria" value={categoria} onChangeText={setCategoria} style={styles.input} />
             <TextInput placeholder="Posições" value={posicoes} onChangeText={setPosicoes} style={styles.input} />
@@ -323,6 +350,9 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 12,
     backgroundColor: '#FAFAFA',
+  },
+  inputMask: {
+    fontSize: 15,
   },
   map: {
     height: 200,
