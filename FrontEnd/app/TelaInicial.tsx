@@ -1,15 +1,31 @@
-import React from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
-import { usePost } from '@/PostContext';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, Keyboard, SafeAreaView } from "react-native";
+import { useState, useEffect } from "react";
+import { usePost } from "@/PostContext";
+import Footer from "@/components/Footer";
+import { useRouter } from "expo-router";
 import PostItem from '@/components/Posts';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 export default function TelaInicial() {
   const { posts } = usePost();
+  const [tecladoAberto, setTecladoAberto] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', () => setTecladoAberto(true));
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => setTecladoAberto(false));
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   return (
-      <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={80}
+    >
+      <SafeAreaView style={styles.container}>
         <Header />
         <FlatList
           data={posts}
@@ -22,10 +38,9 @@ export default function TelaInicial() {
             </View>
           }
         />
-      <Footer/> 
-      </View>
-    
-
+        {!tecladoAberto && <Footer />}
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -43,6 +58,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: 'gray',
-    marginTop: 300
+    marginTop: 350
   }
 });

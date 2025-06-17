@@ -1,37 +1,52 @@
 import { useRouter } from "expo-router";
-import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, FlatList } from "react-native";
 import Header from "@/components/Header";
-import { usePost } from "@/PostContext";
+import PostItem from "@/components/Posts";
+import { usePost, PostProvider } from "@/PostContext";
 import Footer from "@/components/Footer";
 
-export default function TelaInicial() {
+export default function TelaHypados() {
+
     const router = useRouter();
- 
+    const { posts } = usePost();
 
+    const postsInverse = posts.reverse()
     return (
-        <View style={styles.root}>
-            <Header />
-            <View style={styles.centerContent}>
-                <Text style={styles.text}>Não Existe item nos Favoritos ainda</Text>
-            </View>
-        <Footer/> 
-        </View>
-    );
-}
+        <PostProvider>
 
+            <View style={styles.container}>
+                <Header />
+                <FlatList
+                    data={postsInverse}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <PostItem item={item} />}
+                    contentContainerStyle={{ paddingTop: 80, paddingBottom: 100, alignItems: 'center' }}
+                    ListEmptyComponent={
+                        <View style={styles.emptyListContainer}>
+                            <Text style={styles.emptyText}>Nenhum post encontrado.</Text>
+                        </View>
+                    }
+                />
+
+            </View>
+        <Footer/>
+        </PostProvider>
+    )
+}
 const styles = StyleSheet.create({
-    root: {
+    container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
+        paddingTop: 10,
     },
-    centerContent: {
+    emptyListContainer: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    text: {
-        fontSize: 24,
-        fontWeight: "900",
-        marginBottom: 20,
+    emptyText: {
+        fontSize: 16,
+        color: 'gray',
+        marginTop: 350
     }
 });

@@ -110,8 +110,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         width: "100%",
         height: "7%",
-        position: "absolute",
-        bottom: 0,
         borderTopColor: "lightgray",
         borderTopWidth: 2,
         alignItems: "center",

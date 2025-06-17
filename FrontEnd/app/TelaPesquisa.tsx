@@ -1,51 +1,68 @@
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, Keyboard, SafeAreaView } from "react-native";
+import { useState, useEffect } from "react";
 import { usePost } from "@/PostContext";
 import Footer from "@/components/Footer";
 import { useRouter } from "expo-router";
 
 export default function TelaPesquisa() {
   const [pesquisa, setPesquisa] = useState("");
-  const { posts } = usePost();
+  const [tecladoAberto, setTecladoAberto] = useState(false);
 
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', () => setTecladoAberto(true));
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => setTecladoAberto(false));
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  const { posts } = usePost();
   const resultados = posts.filter(post =>
     post.legenda.toLowerCase().includes(pesquisa.toLowerCase())
   );
-
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <View style={styles.root}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.iconleft} onPress={()=> router.push('/TelaInicial')}>
-          <Image
-            source={require('../assets/images/setavoltar.png')}
-            style={styles.iconleft}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={80}
+    >
+      <SafeAreaView style={styles.root}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.iconleft} onPress={() => router.push('/TelaInicial')}>
+            <Image
+              source={require('../assets/images/setavoltar.png')}
+              style={styles.iconleft}
+            />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.searchinput}
+            placeholder="Procurar"
+            placeholderTextColor={"#a9a9a9"}
+            value={pesquisa}
+            onChangeText={setPesquisa}
           />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.searchinput}
-          placeholder="Procurar"
-          placeholderTextColor={"#a9a9a9"}
-          value={pesquisa}
-          onChangeText={setPesquisa}
-        />
-      </View>
+        </View>
 
-      <FlatList
-        style={styles.lista}
-        data={resultados}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.post}>
-            <Image source={{ uri: item.uri }} style={styles.media} />
-            <Text style={styles.caption}>{item.legenda}</Text>
-            <Text style={styles.username}>@{item.userName}</Text>
-          </View>
-        )}
-      />
-    <Footer/>
-    </View>
+        <FlatList
+          style={styles.lista}
+          data={resultados}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 80 }}
+          renderItem={({ item }) => (
+            <View style={styles.post}>
+              <Image source={{ uri: item.uri }} style={styles.media} />
+              <Text style={styles.caption}>{item.legenda}</Text>
+              <Text style={styles.username}>@{item.userName}</Text>
+            </View>
+          )}
+        />
+
+        {!tecladoAberto && <Footer />}
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -71,9 +88,9 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderColor: "lightgray",
     borderWidth: 0.8,
-    marginTop: -30
+    marginTop: -30,
   },
-   iconleft: {
+  iconleft: {
     position: 'absolute',
     left: 10,
     top: 22,
@@ -81,7 +98,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: 'contain',
-    },
+  },
   lista: {
     marginTop: 10,
     paddingHorizontal: 20,
@@ -106,4 +123,3 @@ const styles = StyleSheet.create({
     color: "gray",
   },
 });
-
