@@ -19,6 +19,8 @@ type Evento = {
   categoria: string;
   posicoes: string;
   imagem: string | null;
+  latitude: number;
+  longitude: number;
 };
 
 export default function TelaEventos() {
@@ -39,123 +41,95 @@ export default function TelaEventos() {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-
-  // Carrega eventos do AsyncStorage ao iniciar
-  useEffect(() => {
-    const carregarEventos = async () => {
-      const dados = await AsyncStorage.getItem('eventos');
-      if (dados) {
-        setEventos(JSON.parse(dados));
-      }
-    };
-    carregarEventos();
-  }, []);
+  const [markerPosition, setMarkerPosition] = useState<{ latitude: number; longitude: number }>({
+    latitude: -23.55052,
+    longitude: -46.633308,
+  });
 
   useEffect(() => {
     (async () => {
+      const dados = await AsyncStorage.getItem('eventos');
+      if (dados) setEventos(JSON.parse(dados));
+
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') return;
-      const location = await Location.getCurrentPositionAsync({});
-      setMapRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      });
+      if (status === 'granted') {
+        const loc = await Location.getCurrentPositionAsync({});
+        setMapRegion({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          latitudeDelta: 0.01, longitudeDelta: 0.01
+        });
+        setMarkerPosition({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        });
+      }
     })();
   }, []);
 
   useEffect(() => {
-    if (local.length > 5) {
-      geocodeLocal();
-    }
+    if (local.length > 5) geocodeLocal();
   }, [local]);
 
   const geocodeLocal = async () => {
-    const results = await Location.geocodeAsync(local);
-    if (results.length > 0) {
-      const loc = results[0];
-      setMapRegion({
-        latitude: loc.latitude,
-        longitude: loc.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      });
+    try {
+      const results = await Location.geocodeAsync(local);
+      if (results.length > 0) {
+        const loc = results[0];
+        setMapRegion({ latitude: loc.latitude, longitude: loc.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 });
+        setMarkerPosition({ latitude: loc.latitude, longitude: loc.longitude });
+      } else alert('Endereço não encontrado');
+    } catch {
+      alert('Erro ao buscar localização');
     }
   };
 
   const escolherImagem = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImagem(result.assets[0].uri);
-    }
+    const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, allowsEditing: true, quality: 1 });
+    if (!res.canceled) setImagem(res.assets[0].uri);
   };
 
   const limparFormulario = () => {
-    setNomeTime('');
-    setLocal('');
-    setData('');
-    setHorario('');
-    setCategoria('');
-    setPosicoes('');
-    setImagem(null);
+    setNomeTime(''); setLocal(''); setData(''); setHorario('');
+    setCategoria(''); setPosicoes(''); setImagem(null);
     setEventoEmEdicao(null);
   };
 
-  const salvarEventosNoStorage = async (eventosParaSalvar: Evento[]) => {
-    await AsyncStorage.setItem('eventos', JSON.stringify(eventosParaSalvar));
+  const salvarEventosNoStorage = async (dados: Evento[]) => {
+    await AsyncStorage.setItem('eventos', JSON.stringify(dados));
   };
 
   const salvarEvento = async () => {
-    let novosEventos: Evento[];
+    const novo = eventoEmEdicao
+      ? eventos.map(e => e.id === eventoEmEdicao
+        ? { ...e, nomeTime, local, data, horario, categoria, posicoes, imagem, latitude: markerPosition.latitude, longitude: markerPosition.longitude }
+        : e
+      )
+      : [...eventos, {
+          id: Date.now().toString(), nomeTime, local, data, horario,
+          categoria, posicoes, imagem,
+          latitude: markerPosition.latitude, longitude: markerPosition.longitude
+        }];
 
-    if (eventoEmEdicao) {
-      novosEventos = eventos.map((e) =>
-        e.id === eventoEmEdicao
-          ? { ...e, nomeTime, local, horario, data, categoria, posicoes, imagem }
-          : e
-      );
-    } else {
-      const novoEvento: Evento = {
-        id: Date.now().toString(),
-        nomeTime,
-        local,
-        data,
-        horario,
-        categoria,
-        posicoes,
-        imagem,
-      };
-      novosEventos = [...eventos, novoEvento];
-    }
-
-    setEventos(novosEventos);
-    await salvarEventosNoStorage(novosEventos);
+    setEventos(novo);
+    await salvarEventosNoStorage(novo);
     limparFormulario();
     setCriando(false);
   };
 
-  const editarEvento = (evento: Evento) => {
-    setNomeTime(evento.nomeTime);
-    setLocal(evento.local);
-    setData(evento.data);
-    setHorario(evento.horario);
-    setCategoria(evento.categoria);
-    setPosicoes(evento.posicoes);
-    setImagem(evento.imagem);
-    setEventoEmEdicao(evento.id);
+  const editarEvento = (e: Evento) => {
+    setNomeTime(e.nomeTime); setLocal(e.local); setData(e.data); setHorario(e.horario);
+    setCategoria(e.categoria); setPosicoes(e.posicoes); setImagem(e.imagem);
+    setEventoEmEdicao(e.id);
+    setMapRegion({ latitude: e.latitude, longitude: e.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 });
+    setMarkerPosition({ latitude: e.latitude, longitude: e.longitude });
     setCriando(true);
   };
 
   const excluirEvento = async (id: string) => {
-    const novosEventos = eventos.filter((e) => e.id !== id);
-    setEventos(novosEventos);
-    await salvarEventosNoStorage(novosEventos);
+    const filtro = eventos.filter(e => e.id !== id);
+    setEventos(filtro);
+    await salvarEventosNoStorage(filtro);
     if (eventoEmEdicao === id) {
       limparFormulario();
       setCriando(false);
@@ -165,20 +139,20 @@ export default function TelaEventos() {
   const renderItem = ({ item }: { item: Evento }) => (
     <View style={styles.card}>
       {item.imagem && <Image source={{ uri: item.imagem }} style={styles.imagemEvento} />}
-      <View style={styles.info}>
-        <Text style={styles.tituloEvento}>{item.nomeTime}</Text>
-        <Text style={styles.infoTexto}>📍 {item.local}</Text>
-        <Text style={styles.infoTexto}>📅 {item.data}</Text>
-        <Text style={styles.infoTexto}>⏰ {item.horario}</Text>
-        <Text style={styles.tag}>Categoria: {item.categoria}</Text>
-        <Text style={styles.tag}>Posições: {item.posicoes}</Text>
-
-        <View style={styles.botoesAcoes}>
-          <TouchableOpacity onPress={() => editarEvento(item)} style={styles.botaoEditar}>
-            <Text style={styles.textoBotaoPequeno}>Editar</Text>
+      <View style={styles.cardInfo}>
+        <Text style={styles.cardTitle}>{item.nomeTime}</Text>
+        <Text style={styles.cardText}>📍 {item.local}</Text>
+        <Text style={styles.cardText}>📅 {item.data} ⏰ {item.horario}</Text>
+        <View style={styles.tagContainer}>
+          <Text style={styles.tag}>{item.categoria}</Text>
+          <Text style={styles.tag}>{item.posicoes}</Text>
+        </View>
+        <View style={styles.cardActions}>
+          <TouchableOpacity onPress={() => editarEvento(item)} style={[styles.btnSmall, styles.btnEdit]}>
+            <Text style={styles.btnSmallText}>Editar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => excluirEvento(item.id)} style={styles.botaoExcluir}>
-            <Text style={styles.textoBotaoPequeno}>Excluir</Text>
+          <TouchableOpacity onPress={() => excluirEvento(item.id)} style={[styles.btnSmall, styles.btnDelete]}>
+            <Text style={styles.btnSmallText}>Excluir</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -187,60 +161,47 @@ export default function TelaEventos() {
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.titulo}>📣 Peneiras Disponíveis</Text>
-
-        <View style={styles.boxTitulo}>
-          <Text style={styles.destaques}>Destaques do momento</Text>
-          <Text style={styles.subtitulo}>Encontre sua próxima oportunidade no futebol</Text>
-        </View>
-
-        <FlatList
-          data={eventos}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={{ gap: 16 }}
-          scrollEnabled={false}
-        />
-
-        <TouchableOpacity onPress={() => { setCriando(true); limparFormulario(); }} style={styles.botaoCriar}>
-          <Text style={styles.textoBotaoCriar}>+ Criar Evento</Text>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.header}>📣 Peneiras Disponíveis</Text>
+        <TouchableOpacity onPress={() => { limparFormulario(); setCriando(true); }} style={styles.addButton}>
+          <Text style={styles.addButtonText}>+ Criar Peneira</Text>
         </TouchableOpacity>
 
         {criando && (
-          <View style={styles.boxCriacao}>
+          <View style={styles.formContainer}>
+            <Text style={styles.formHeader}>{eventoEmEdicao ? 'Editar Evento' : 'Criar Evento'}</Text>
             <TextInput placeholder="Nome do time" value={nomeTime} onChangeText={setNomeTime} style={styles.input} />
             <TextInput placeholder="Local" value={local} onChangeText={setLocal} style={styles.input} />
-            <TextInput
-              placeholder="Horário (ex: 14:30)"
-              value={horario}
-              onChangeText={(text) => setHorario(text.replace(/[^0-9:]/g, ''))}
-              style={styles.input}
-            />
-            <TextInputMask
-              type={'datetime'}
-              options={{ format: 'DD-MM-YYYY' }}
-              placeholder="Data (ex: 01-01-2025)"
-              value={data}
-              onChangeText={setData}
-              style={[styles.input, styles.inputMask]}
-            />
+            <View style={styles.horizontal}>
+              <TextInput placeholder="Horário (14:30)" value={horario} onChangeText={text => setHorario(text.replace(/[^0-9:]/g, ''))} style={[styles.input, styles.halfWidth]} />
+              <TextInputMask type='datetime' options={{ format: 'DD-MM-YYYY' }} placeholder="Data (01-01-2025)" value={data} onChangeText={setData} style={[styles.input, styles.halfWidth]} />
+            </View>
             <TextInput placeholder="Categoria" value={categoria} onChangeText={setCategoria} style={styles.input} />
             <TextInput placeholder="Posições" value={posicoes} onChangeText={setPosicoes} style={styles.input} />
 
-            <MapView style={styles.map} region={mapRegion}>
-              <Marker coordinate={mapRegion} />
-            </MapView>
+            <View style={styles.mapWrapper}>
+              <MapView
+                style={styles.map}
+                region={mapRegion}
+                onPress={e => {
+                  setMarkerPosition(e.nativeEvent.coordinate);
+                  setMapRegion({ ...mapRegion, latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude });
+                }}
+              >
+                <Marker coordinate={markerPosition} />
+              </MapView>
+            </View>
 
-            <TouchableOpacity onPress={escolherImagem} style={styles.botaoImagem}>
-              <Text style={styles.textoBotaoImagem}>Selecionar imagem do CT</Text>
+            <TouchableOpacity onPress={escolherImagem} style={styles.btnImage}>
+              <Text style={styles.btnImageText}>Selecionar Imagem do CT</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={salvarEvento} style={styles.botaoSalvar}>
-              <Text style={styles.textoSalvar}>{eventoEmEdicao ? 'Atualizar Evento' : 'Salvar Evento'}</Text>
+            <TouchableOpacity onPress={salvarEvento} style={styles.btnSave}>
+              <Text style={styles.btnSaveText}>{eventoEmEdicao ? 'Atualizar Evento' : 'Salvar Evento'}</Text>
             </TouchableOpacity>
           </View>
         )}
+
+        <FlatList data={eventos} keyExtractor={i => i.id} renderItem={renderItem} style={styles.list} />
       </ScrollView>
       <Footer />
     </KeyboardAvoidingView>
@@ -248,137 +209,165 @@ export default function TelaEventos() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F4F7F9' },
-  scrollContainer: { padding: 16, paddingBottom: 100 },
-  titulo: {
-    fontSize: 26,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#222',
+  root: {
+    flex: 1,
+    backgroundColor: '#f0f4f7',
   },
-  boxTitulo: {
+  content: {
     padding: 16,
-    marginBottom: 24,
-    borderRadius: 16,
-    backgroundColor: '#E6F2EC',
+    paddingBottom: 120,
   },
-  destaques: { fontWeight: '700', fontSize: 18, textAlign: 'center', color: '#1A5D3F' },
-  subtitulo: { fontSize: 14, textAlign: 'center', color: '#4A4A4A', marginTop: 4 },
-  card: {
-    flexDirection: 'row',
-    borderRadius: 14,
+  header: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 12,
+    alignSelf: 'center',
+  },
+  addButton: {
+    backgroundColor: '#1E90FF',
     padding: 14,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
-    gap: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  imagemEvento: { width: 90, height: 90, borderRadius: 10, backgroundColor: '#eee' },
-  info: { flex: 1, justifyContent: 'space-between' },
-  tituloEvento: {
+  addButtonText: {
+    color: '#3DB342',
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 6,
-    color: '#2B2B2B',
   },
-  infoTexto: {
-    fontSize: 14,
-    color: '#555',
-    marginBottom: 2,
-  },
-  tag: {
-    fontSize: 13,
-    color: '#3A7D44',
-    backgroundColor: '#E1F3E8',
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderRadius: 4,
-    marginTop: 4,
-    alignSelf: 'flex-start',
-  },
-  botoesAcoes: {
-    flexDirection: 'row',
-    marginTop: 10,
-    gap: 8,
-  },
-  botaoEditar: {
-    backgroundColor: '#00B386',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-  },
-  botaoExcluir: {
-    backgroundColor: '#E74C3C',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-  },
-  textoBotaoPequeno: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  botaoCriar: {
-    backgroundColor: '#1A5D3F',
-    padding: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 28,
-  },
-  textoBotaoCriar: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 15,
-  },
-  boxCriacao: {
+  formContainer: {
     backgroundColor: '#fff',
-    padding: 18,
-    marginTop: 20,
-    borderRadius: 14,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
     shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  formHeader: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 12,
+    color: '#1a1a1a',
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#D0D0D0',
+    backgroundColor: '#f9fafb',
     borderRadius: 8,
-    padding: 10,
+    borderWidth: 1,
+    borderColor: '#dde2e6',
+    padding: 12,
     marginBottom: 12,
-    backgroundColor: '#FAFAFA',
   },
-  inputMask: {
-    fontSize: 15,
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  halfWidth: {
+    width: '48%',
+  },
+  mapWrapper: {
+    overflow: 'hidden',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 16,
+    height: 200,
   },
   map: {
-    height: 200,
-    width: '100%',
+    flex: 1,
+  },
+  btnImage: {
+    backgroundColor: '#28a745',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  btnImageText: {
+    color: '#fff',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  btnSave: {
+    backgroundColor: '#333',
+    padding: 14,
+    borderRadius: 8,
+  },
+  btnSaveText: {
+    color: '#fff',
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  list: {
+    marginTop: 8,
+  },
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     borderRadius: 12,
-    marginBottom: 12,
-  },
-  botaoImagem: {
-    backgroundColor: '#007BFF',
     padding: 12,
-    borderRadius: 8,
     marginBottom: 12,
-    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  textoBotaoImagem: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  botaoSalvar: {
-    backgroundColor: '#1A1A1A',
-    padding: 12,
+  imagemEvento: {
+    width: 80,
+    height: 80,
     borderRadius: 8,
-    alignItems: 'center',
+    marginRight: 12,
+    backgroundColor: '#eee',
   },
-  textoSalvar: {
+  cardInfo: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
+    color: '#222',
+  },
+  cardText: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
+  },
+  tagContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 8,
+  },
+  tag: {
+    fontSize: 12,
     color: '#fff',
-    fontWeight: 'bold',
+    backgroundColor: '#1E90FF',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    marginRight: 6,
+    marginTop: 4,
+  },
+  cardActions: {
+    flexDirection: 'row',
+    marginTop: 8,
+  },
+  btnSmall: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  btnEdit: {
+    backgroundColor: '#ffc107',
+  },
+  btnDelete: {
+    backgroundColor: '#dc3545',
+  },
+  btnSmallText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });
